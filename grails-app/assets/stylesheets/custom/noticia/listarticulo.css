@@ -1,0 +1,32 @@
+#paginate > a {
+  decoration: none;
+  color: #5E1240;
+  border: solid 1px #5E1240;
+  padding: 0.5em;
+  font-size: 20px;
+  border-radius: 2px;
+  margin-right: 2px;
+}
+
+#paginate > span {
+  decoration: none;
+  color: white;
+  background-color: #5E1240;
+  border: solid 1px white;
+  padding: 0.5em;
+  font-size: 20px;
+  border-radius: 2px;
+  margin-right: 2px;
+}
+
+.bg-purp {
+  background-color: #5E1240;
+}
+
+.text-purp {
+  color: #5E1240;
+}
+
+.border-purp {
+  border: 1px solid #5E1240;
+}

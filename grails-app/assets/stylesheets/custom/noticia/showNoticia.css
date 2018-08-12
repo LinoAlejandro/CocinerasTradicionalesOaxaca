@@ -1,0 +1,17 @@
+.bg-red {
+  background-color: #9A031E;
+}
+
+.text-red {
+  color: #9A031E;
+}
+
+.border-red {
+  border: 1px solid #9A031E;
+}
+
+hr {
+  border-top: solid 1.5px #9A031E;
+  border-bottom: solid 1.5px #9A031E;
+  padding: 5px;
+}

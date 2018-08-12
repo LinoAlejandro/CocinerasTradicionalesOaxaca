@@ -1,0 +1,127 @@
+.navbar-item-custom {
+  transition: box-shadow 0.3s ease-in-out;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.navbar-item-custom:hover {
+  box-shadow:inset 0px 2px 0px 0px rgba(148,0,0,1);
+}
+
+.navbar-item-custom-selected {
+  box-shadow:inset 0px 2px 0px 0px rgba(148,0,0,1);
+}
+
+.navbar-item-custom .icon-red-hover{
+  transition: color 0.3s ease-in-out;
+  color: #BFBFBF;
+}
+
+.navbar-item-custom:hover .icon-red-hover{
+  color: rgba(148,0,0,1);
+}
+
+.form-group .icon-red-hover{
+  transition: color 0.3s ease-in-out;
+  color: #BFBFBF;
+}
+
+.form-group:hover .icon-red-hover{
+  color: rgba(148,0,0,1);
+}
+
+.active .icon-red-hover{
+  color: rgba(148,0,0,1);
+}
+
+.navbar-custom {
+  font-family: 'Lato', sans-serif;
+  background-color: #000000;
+
+}
+
+.input-group-custom {
+  font-family: 'Lato', sans-serif;
+  background-color: #000000;
+  color: #BFBFBF;
+  border: 1px solid #BFBFBF;
+  border-radius: 3px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.input-group-custom:focus, .input-group-custom:hover {
+  border-color: rgba(148,0,0,1);
+  outline:none !important;
+}
+
+.dropdown-custom {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.dropdown-menu-custom {
+  font-family: 'Lato', sans-serif;
+  background-color: #000000;
+}
+
+.dropdown-item-custom{
+  color: #BFBFBF;
+}
+
+.dropdown-item-custom:hover {
+  background-color: #000000;
+  color: white;
+}
+
+.notification-active {
+  background-color: rgba(140,0,0,1);
+  transition: background-color 0.3s ease-in-out;
+  color: #BFBFBF;
+}
+
+.notification-active:hover {
+  background-color: rgb(180, 0, 0);
+  color: white;
+}
+
+.notification-animation {
+  border-radius: 2px;
+  animation: changeColor 2s infinite
+}
+
+@keyframes changeColor {
+    from {color: rgba(250,0,0,1);}
+    to {color: rgba(0,0,0,1);}
+}
+
+.dropdown-item-custom-configuration {
+}
+
+.dropdown-item-custom-configuration:hover {
+  color: #BFBFBF;
+}
+
+.add-red-margin {
+  border: 1px solid transparent;
+  border-color: transparent;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.add-red-margin:hover {
+  border-color: rgba(148,0,0,1);
+}
+
+.add-red-margin:focus {
+  border-color: rgba(148,0,0,1);
+}
+
+.add-red-margin:active {
+  border-color: rgba(148,0,0,1);
+}
+
+.container-custom-welcome {
+  font-family: 'Roboto Condensed';
+  border-radius: 5px;
+  background-color: rgba(0,0,0,.8);
+  color: white;
+}

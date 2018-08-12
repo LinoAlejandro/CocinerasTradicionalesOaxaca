@@ -1,0 +1,32 @@
+#paginate > a {
+  decoration: none;
+  color: #9A031E;
+  border: solid 1px #9A031E;
+  padding: 0.5em;
+  font-size: 20px;
+  border-radius: 2px;
+  margin-right: 2px;
+}
+
+#paginate > span {
+  decoration: none;
+  color: white;
+  background-color: #9A031E;
+  border: solid 1px white;
+  padding: 0.5em;
+  font-size: 20px;
+  border-radius: 2px;
+  margin-right: 2px;
+}
+
+.bg-red {
+  background-color: #5E1240;
+}
+
+.text-red {
+  color: #5E1240;
+}
+
+.border-red {
+  border: 1px solid #5E1240;
+}

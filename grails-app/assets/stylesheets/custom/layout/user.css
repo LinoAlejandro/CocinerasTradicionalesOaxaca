@@ -1,0 +1,65 @@
+.custom-nav {
+  background-color: #221d23;
+}
+
+.custom-navbar-item-purp {
+  transition: outline 0.3s ease-in-out;
+}
+
+.custom-navbar-item-purp:hover  {
+  outline: 5px solid #7b194f;
+}
+
+.custom-navbar-item-green {
+  transition: outline 0.3s ease-in-out;
+}
+
+.custom-navbar-item-green:hover  {
+  outline: 5px solid #4F8E3A;
+}
+
+.custom-navbar-item-purp-selected  {
+  outline: 5px solid #7b194f;
+}
+
+.custom-navbar-item-green-selected  {
+  outline: 5px solid #4F8E3A;
+}
+
+.josefin {
+  font-family: 'Josefin Sans', Helvetica, Arial, sans-serif;
+}
+
+.dancing {
+  font-family: 'Dancing Script', Georgia, Times, serif;
+}
+
+.lobster {
+  font-family: 'Lobster', Georgia, Times, serif;
+}
+
+.cabin {
+  font-family: 'Cabin', Helvetica, Arial, sans-serif;
+}
+
+.dropdown-item-custom-green {
+  transition: box-shadow 0.3s ease-in-out;
+  color:#bbb;
+}
+
+.dropdown-item-custom-green:hover {
+  background-color: #221D23;
+  box-shadow: inset 0px 3px 0px 0px #4F8E3A;
+  color: white;
+}
+
+.dropdown-item-custom-purp {
+  transition: box-shadow 0.3s ease-in-out;
+  color:#bbb;
+}
+
+.dropdown-item-custom-purp:hover {
+  background-color: #221D23;
+  box-shadow: inset 0px 3px 0px 0px #7b194f;
+  color: white;
+}
