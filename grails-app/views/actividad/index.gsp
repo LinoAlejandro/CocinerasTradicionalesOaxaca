@@ -13,48 +13,94 @@
     </div>
     <div class="container">
       <div class="row">
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th>Título</th>
-              <th>Fecha de publicación</th>
-              <th>Fecha de inicio</th>
-              <th>Fecha final</th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <g:each var="item" in="${this.actividades}">
+        <div class="col-md-12"> 
+          <table class="table">
+            <thead class="thead-dark">
               <tr>
-                <td>
-                  ${item.titulo}
-                </td>
-                <td>
-                  ${item.fechaPublicacion.format('yyyy-MM-dd')}
-                </td>
-                <td>
-                  ${item.fechaInicio.format('yyyy-MM-dd')}
-                </td>
-                <td>
-                  ${item.fechaFinal.format('yyyy-MM-dd')}
-                </td>
-                <td>
-                  <g:link action="update" params="[id:item.id]">Modificar</g:link>
-                </td>
-                <td>
-                  <g:link action="delete" params="[id:item.id]">Eliminar</g:link>
-                </td>
-                <td>
-                  <g:link action="agregarTraduccion" params="[actividadObject:item.id, offset:params.offset]">Agregar Traducción</g:link>
-                </td>
+                <th>Título</th>
+                <th>Fecha de publicación</th>
+                <th>Fecha de inicio</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
               </tr>
-            </g:each>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <g:each var="actividad" in="${actividades}">
+                <tr id="${actividad.id}">
+                  <td>
+                    ${actividad.traduccionEspanol.titulo}
+                  </td>
+                  <td>
+                    ${actividad.fechaPublicacion}
+                  </td>
+                  <td>
+                    ${actividad.fechaInicio}
+                  </td>
+                  <td>
+                    ${actividad.traduccionIngles?.titulo ? 
+                    raw('<div class="text-success">Cuenta con traducción</div>') : 
+                    raw('<div class="text-danger">Falta por traducir</div>')}
+                  </td>
+                  <td>
+                    <g:link action="update" id="${actividad.id}">Modificar</g:link>
+                  </td>
+                  <td>
+                    <g:link action="delete" id="${actividad.id}">Eliminar</g:link>
+                  </td>
+                  <td> 
+                    <button class="btn btn-secondary btn-sm" onclick="clicked(this)" data-toggle="modal" data-target="#exampleModal">
+                      Agregar media
+                    </button>
+                  </td>
+                </tr>
+              </g:each>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Crear elemento de media</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id" id="idActividad">
+            <div class="form-group">
+              <label for="">Pie de media [Español] </label>
+              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
+            </div>
+            <div class="form-group">
+              <label for="">Pie de media [Inglés] </label>
+              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
+            </div>
+            <div class="form-group">
+              <label for="">Ubicación</label>
+              <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
+            </div>
+            <div class="form-group">
+              <label for="">Tipo</label>
+              <select name="tipo" id="tipo" class="form-control">
+                <option value="imagen">Imágen</option>
+                <option value="video">Video</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="addMedia()">Crear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <g:link action="create" class="btn btn-outline-dark btn-md">Crear nueva actividad</g:link>
     </div>
@@ -74,5 +120,31 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      var idActividad = document.getElementById('idActividad')
+      function clicked(el) {
+          idActividad.value = el.parentNode.parentNode.id
+      }
+
+      function addMedia() {
+          var pieMediaEspanol = document.getElementById('pieMediaEspanol')
+          var pieMediaIngles = document.getElementById('pieMediaIngles')
+          var ubicacion = document.getElementById('ubicacion')
+          var tipo = document.getElementById('tipo')
+
+          var url = "${createLink(action:'addMedia')}"
+          var datos = {
+              actividad: idActividad.value,
+              'traduccionEspanol.pieMedia': pieMediaEspanol.value,
+              'traduccionIngles.pieMedia': pieMediaIngles.value,
+              ubicacion: ubicacion.value,
+              tipo: tipo.value
+          } 
+
+          $.post(url, datos, function(data, status ){
+              console.log(data, status)
+          })
+      }
+    </script>
   </body>
 </html>

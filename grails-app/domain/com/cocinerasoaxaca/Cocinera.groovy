@@ -12,9 +12,9 @@ class Cocinera {
     Double latitud
     Double longitud
     String ubicacionImagen
-    Collection media
+    Collection platillos
 
-    static hasMany = [media:CocineraMedia]
+    static hasMany = [platillos:Platillo]
 
     static constraints = {
         nombre size:0..400

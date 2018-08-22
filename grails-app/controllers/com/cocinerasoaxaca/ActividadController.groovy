@@ -1,47 +1,67 @@
 package com.cocinerasoaxaca
 import grails.plugin.springsecurity.annotation.Secured
+import java.text.SimpleDateFormat
+import java.text.DateFormat
+import grails.converters.JSON
 
 class ActividadController {
 
     @Secured('ROLE_ADMIN')
     def index() {
-        Actividad.withSession {
-            it.flush()
-            it.clear()
-        }
         if(!params.max) {
             params.max = 10
         }
-        [actividades: Actividad.executeQuery('from actividad',params), actividadCount:Actividad.count()]
+        [actividades: Actividad.findAll(params), actividadCount: Actividad.count()]
     }
 
     @Secured('ROLE_ADMIN')
-    def create(Actividad actividad, ActividadTraduccion traduccion) {
+    def create(Actividad actividad) {
         if(request.method == 'POST') {
             actividad.fechaPublicacion = new Date()
-            traduccion.titulo = actividad.titulo
-            traduccion.actividad = actividad
-            traduccion.lenguaje = 'Español'
-            if(actividad.validate() && traduccion.validate()) {
-                actividad.save(flush:true)
-                traduccion.save(flush:true)
+            if(actividad.validate()) {
+                actividad.save()
+                session.media.each {
+                    it.actividad = actividad
+                    it.save()
+                }
+                session.media = null
                 redirect action:'index'
                 return
             }
+        } else {
+            session.media = []
         }
-        [actividad:actividad, traduccion:traduccion]
+
+        [actividad:actividad]
     }
 
     @Secured('ROLE_ADMIN')
     def update(Actividad actividad) {
         if(request.method == 'POST') {
             actividad.properties = params
-            if(actividad.save(flush:true)) {
+            if(actividad.save()) {
                 redirect action:'index'
                 return
             }
         }
         [actividad:actividad]
+    }
+
+    @Secured('ROLE_ADMIN')
+    def addMedia() {
+        def actividadMedia = new ActividadMedia(params)
+        if(actividadMedia.validate()) {
+            session.media.add(actividadMedia)
+            response.status = 200
+            render(contentType: "application/json") {
+                actividad(tipo: actividadMedia.tipo, 
+                    ubicacion: actividadMedia.ubicacion, 
+                    'traduccionEspanol.pieMedia':actividadMedia.traduccionEspanol.pieMedia)
+            }
+        } else {
+            response.status = 204
+            return [] as JSON
+        }
     }
 
     @Secured('ROLE_ADMIN')

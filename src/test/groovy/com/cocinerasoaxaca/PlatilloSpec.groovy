@@ -3,7 +3,7 @@ package com.cocinerasoaxaca
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class CocineraMediaSpec extends Specification implements DomainUnitTest<CocineraMedia> {
+class PlatilloSpec extends Specification implements DomainUnitTest<Platillo> {
 
     def setup() {
     }

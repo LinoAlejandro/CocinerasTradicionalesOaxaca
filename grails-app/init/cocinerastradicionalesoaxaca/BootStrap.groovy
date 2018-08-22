@@ -29,11 +29,11 @@ class BootStrap {
         }
 
         def actividad1 = new Actividad(
-            fechaPublicacion: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-01 15:23:45"),
+            fechaPublicacion: new Date(),
             fechaInicio: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-02 12:25:45"),
             fechaFinal: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-03 09:25:45"),
-            latitud: 17.066093,
-            longitud: -96.723414,
+            latitud: '17.066093',
+            longitud: '-96.723414',
             lugar: 'Santo Domingo',
             traduccionEspanol: new ActividadTraduccion(
                 titulo: 'Esta es la actividad 1',
@@ -45,11 +45,11 @@ class BootStrap {
         ).save()
 
         def actividad2 = new Actividad(
-            fechaPublicacion: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-03 1:23:45"),
+            fechaPublicacion: new Date(),
             fechaInicio: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-05 13:25:45"),
             fechaFinal: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-06 14:25:45"),
-            latitud: 17.066093,
-            longitud: -96.723414,
+            latitud: '17.066093',
+            longitud: '-96.723414',
             lugar: 'Santo Domingo',
             traduccionEspanol:  new ActividadTraduccion(
                 titulo: 'Esta es la actividad 1',
@@ -61,11 +61,11 @@ class BootStrap {
         ).save()
 
         def actividad3 = new Actividad(
-            fechaPublicacion: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-03 1:23:45"),
+            fechaPublicacion: new Date(),
             fechaInicio: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-11 12:25:45"),
             fechaFinal: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-11 11:25:45"),
-            latitud: 17.066093,
-            longitud: -96.723414,
+            latitud: '17.066093',
+            longitud: '-96.723414',
             lugar: 'Santo Domingo',
             traduccionEspanol:  new ActividadTraduccion(
                 titulo: 'Esta es la actividad 1',
@@ -77,11 +77,11 @@ class BootStrap {
         ).save()
 
         def actividad4 = new Actividad(
-            fechaPublicacion: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-03 1:23:45"),
+            fechaPublicacion: new Date(),
             fechaInicio: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-21 18:00:00"),
             fechaFinal: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-22 11:00:00"),
-            latitud: 17.066093,
-            longitud: -96.723414,
+            latitud: '17.066093',
+            longitud: '-96.723414',
             lugar: 'Santo Domingo',
             traduccionEspanol:  new ActividadTraduccion(
                 titulo: 'Esta es la actividad 1',
@@ -93,11 +93,11 @@ class BootStrap {
         ).save()
 
         def actividad5 = new Actividad(
-            fechaPublicacion: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-03 13:23:45"),
+            fechaPublicacion: new Date(),
             fechaInicio: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-25 14:25:45"),
             fechaFinal: Date.parse("yyyy-MM-dd hh:mm:ss", "2018-08-26 17:23:45"),
-            latitud: 17.066093,
-            longitud: -96.723414,
+            latitud: '17.066093',
+            longitud: '-96.723414',
             lugar: 'Santo Domingo',
             traduccionEspanol:  new ActividadTraduccion(
                 titulo: 'Esta es la actividad 1',

@@ -1,5 +1,4 @@
 package com.cocinerasoaxaca
-
 class Noticia {
     Date fechaPublicacion
     String tipo
@@ -14,8 +13,14 @@ class Noticia {
     static constraints = {
         ubicacionImagen size:0..10000, nullable:true, blank:true
         tipo inList: ['noticia', 'boletin', 'Artículo', 'Boletín', 'Noticia']
-        traduccionEspanol nullable:true, blank:true
         traduccionIngles nullable:true, blank:true
+        traduccionEspanol validator: { val, obj ->
+            if(val.titulo == null) {
+                return 'traduccionEspanol.titulo.null'
+            } else if(val.contenido == null) {
+                return 'traduccionEspanol.contenido.null'
+            }
+        }
     }
 
     static mapping = {
@@ -29,7 +34,7 @@ class NoticiaTraduccion {
     String contenido
 
     static constraints = {
-        titulo size:0..900
-        contenido size:0..50000, blank:false
+        titulo size:0..900, nullable:true, blank:true
+        contenido size:0..50000, nullable:true, blank:true
     }
 }

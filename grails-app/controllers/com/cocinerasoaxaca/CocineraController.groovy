@@ -56,39 +56,39 @@ class CocineraController {
     }
 
     @Secured('ROLE_ADMIN')
-    def saveMedia(CocineraMedia media) {
-        CocineraMedia.withSession {
+    def saveplatillo(Platillo platillo) {
+        Platillo.withSession {
             it.flush()
             it.clear()
         }
         if(request.method == 'POST') {
-            media.cocinera = Cocinera.get(params.cocineraObject)
-            if(media.save(flush:true)) {
-                redirect action: "update", id: media.cocinera.id
+            platillo.cocinera = Cocinera.get(params.cocineraObject)
+            if(platillo.save(flush:true)) {
+                redirect action: "update", id: platillo.cocinera.id
                 return
             }
         }
-        [cocineraObject:params.cocineraObject, media:media]
+        [cocineraObject:params.cocineraObject, platillo:platillo]
     }
 
     @Secured('ROLE_ADMIN')
-    def updateMedia(CocineraMedia media) {
+    def updateplatillo(Platillo platillo) {
         if(request.method == 'POST') {
-            media.properties = params
-            if(media.save(flush:true)) {
-                def cocinera = media.cocinera
+            platillo.properties = params
+            if(platillo.save(flush:true)) {
+                def cocinera = platillo.cocinera
                 redirect action: "update", params: [id:cocinera.id]
                 return
             }
         }
-        [media:media]
+        [platillo:platillo]
     }
 
     @Secured('ROLE_ADMIN')
-    def deleteMedia(CocineraMedia media) {
-        def cocinera = Cocinera.get(media.cocinera.id)
-        media.delete(flush:true)
-        CocineraMedia.withSession {
+    def deleteplatillo(Platillo platillo) {
+        def cocinera = Cocinera.get(platillo.cocinera.id)
+        platillo.delete(flush:true)
+        Platillo.withSession {
             it.flush()
             it.clear()
         }
@@ -97,7 +97,7 @@ class CocineraController {
 
     @Secured('permitAll')
     def show(Cocinera cocinera) {
-        [cocinera:cocinera, platillos:CocineraMedia.findByCocineraAndLenguaje(cocinera, session.language)]
+        [cocinera:cocinera, platillos:Platillo.findByCocineraAndLenguaje(cocinera, session.language)]
     }
 
     @Secured('permitAll')
