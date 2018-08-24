@@ -1,6 +1,8 @@
 package com.cocinerasoaxaca
+
 class Noticia {
     Date fechaPublicacion
+    String autor
     String tipo
     String ubicacionImagen
     Collection media
@@ -11,8 +13,9 @@ class Noticia {
     static embedded = ['traduccionEspanol', 'traduccionIngles']
 
     static constraints = {
+        autor nullable:true, blank:true, size:5..400
         ubicacionImagen size:0..10000, nullable:true, blank:true
-        tipo inList: ['noticia', 'boletin', 'Artículo', 'Boletín', 'Noticia']
+        tipo inList: ['Artículo', 'Boletín', 'Noticia']
         traduccionIngles nullable:true, blank:true
         traduccionEspanol validator: { val, obj ->
             if(val.titulo == null) {

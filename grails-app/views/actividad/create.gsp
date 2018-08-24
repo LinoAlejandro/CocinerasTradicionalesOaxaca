@@ -88,10 +88,10 @@
               </table>
             </div>
             <div class="form-group">
-              <button type="button" class="btn btn-secondary" onclick="clicked(this)" data-toggle="modal" data-target="#exampleModal">
+              <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
                 Agregar media
               </button>
-              <input type="submit" name="" value="Crear Nuevo" class="btn btn-primary btn-md">
+              <input type="submit" name="" value="Crear" class="btn btn-primary btn-md">
             </div>
           </div>
         </div>
@@ -108,7 +108,6 @@
           </div>
           <div class="modal-body">
             <div id="hidden"></div>
-            <input type="hidden" name="id" id="idActividad">
             <div class="form-group">
               <label for="">Pie de media [Español] </label>
               <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
@@ -128,6 +127,10 @@
                 <option value="video">Video</option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="">Autor</label>
+              <input type="text" class="form-control" name="datosAutor" id="datosAutor"/>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -138,27 +141,26 @@
     </div>
 
     <script type="text/javascript">
-      var idActividad = document.getElementById('idActividad')
+
       var pieMediaEspanol = document.getElementById('pieMediaEspanol')
       var pieMediaIngles = document.getElementById('pieMediaIngles')
       var ubicacion = document.getElementById('ubicacion')
       var tipo = document.getElementById('tipo')
+      var datosAutor = document.getElementById('datosAutor')
       var mediaTable = document.getElementById('mediaTable')
       var hidden = document.getElementById('hidden')
 
-      function clicked(el) {
-          idActividad.value = el.parentNode.parentNode.id
-      }
-
       function addMedia() {
-
           $.post("${createLink(action:'addMedia')}" ,
-              {actividad: idActividad.value,
-              'traduccionEspanol.pieMedia': pieMediaEspanol.value,
+              {'traduccionEspanol.pieMedia': pieMediaEspanol.value,
               'traduccionIngles.pieMedia': pieMediaIngles.value,
               ubicacion: ubicacion.value,
-              tipo: tipo.value} ,
+              tipo: tipo.value,
+              datosAutor: datosAutor.value} ,
               function(data, status) {
+                  hidden.innerHTML = ''
+                  var alert = document.createElement('div')
+                  alert.classList.add('mb-4')
                   if(status == 'success') {
                       var tr = document.createElement('tr')
 
@@ -176,14 +178,16 @@
 
                       mediaTable.appendChild(tr)
 
+                      alert.classList.add('alert-success')
+                      alert.innerHTML = 'Media agregada temporalmente'
+                      
                   } else if(status == 'nocontent') {
-                      if(hidden.firtsChild)
-                        hidden.removeChild(hidden.firtsChild)
-                      var alert = document.createElement('div')
+
                       alert.classList.add('alert-danger')
                       alert.innerHTML = 'Algún dato de ingreso es incorrecto, revise su manual de usuario para mayor información'
-                      hidden.appendChild(alert)
                   }
+
+                  hidden.appendChild(alert)
               }
           )
       }

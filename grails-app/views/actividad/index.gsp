@@ -44,13 +44,13 @@
                     raw('<div class="text-danger">Falta por traducir</div>')}
                   </td>
                   <td>
-                    <g:link action="update" id="${actividad.id}">Modificar</g:link>
+                    <g:link class="btn btn-outline-primary btn-sm" action="update" id="${actividad.id}">Modificar</g:link>
                   </td>
                   <td>
-                    <g:link action="delete" id="${actividad.id}">Eliminar</g:link>
+                    <g:link class="btn btn-outline-danger btn-sm" action="delete" id="${actividad.id}">Eliminar</g:link>
                   </td>
                   <td> 
-                    <button class="btn btn-secondary btn-sm" onclick="clicked(this)" data-toggle="modal" data-target="#exampleModal">
+                    <button class="btn btn-outline-success btn-sm" onclick="clicked(this)" data-toggle="modal" data-target="#exampleModal">
                       Agregar media
                     </button>
                   </td>
@@ -73,6 +73,7 @@
           </div>
           <div class="modal-body">
             <input type="hidden" name="id" id="idActividad">
+            <div id="hidden"></div>
             <div class="form-group">
               <label for="">Pie de media [Español] </label>
               <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
@@ -91,6 +92,10 @@
                 <option value="imagen">Imágen</option>
                 <option value="video">Video</option>
               </select>
+            </div>
+            <div class="form-group">
+              <label for="">Autor</label>
+              <input type="text" class="form-control" name="datosAutor" id="datosAutor"/>
             </div>
           </div>
           <div class="modal-footer">
@@ -127,22 +132,37 @@
       }
 
       function addMedia() {
+
           var pieMediaEspanol = document.getElementById('pieMediaEspanol')
           var pieMediaIngles = document.getElementById('pieMediaIngles')
           var ubicacion = document.getElementById('ubicacion')
           var tipo = document.getElementById('tipo')
+          var datosAutor = document.getElementById('datosAutor')
 
-          var url = "${createLink(action:'addMedia')}"
-          var datos = {
+          var url = "${createLink(action:'saveMedia')}"
+          var data = {
               actividad: idActividad.value,
               'traduccionEspanol.pieMedia': pieMediaEspanol.value,
               'traduccionIngles.pieMedia': pieMediaIngles.value,
               ubicacion: ubicacion.value,
-              tipo: tipo.value
+              tipo: tipo.value,
+              datosAutor: datosAutor.value
           } 
 
-          $.post(url, datos, function(data, status ){
-              console.log(data, status)
+          $.post(url, data, function(data, status ){
+              var hidden = document.getElementById('hidden')
+              hidden.innerHTML = ''
+              var div = document.createElement('div')
+              div.classList.add('mb-4')
+
+              if(status == 'success') { 
+                  div.innerHTML = 'El elemento de media ha sido exitosamente almacenado'
+                  div.classList.add('alert-success')
+              } else {
+                  div.innerHTML = 'Existe un error en los datos de entrada, para mas información consulte su manual de usuario'
+                  div.classList.add('alert-danger')
+              }
+              hidden.appendChild(div)
           })
       }
     </script>

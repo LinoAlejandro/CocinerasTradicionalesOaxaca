@@ -1,36 +1,57 @@
 package com.cocinerasoaxaca
 import grails.plugin.springsecurity.annotation.Secured
 import java.text.SimpleDateFormat
+import grails.converters.JSON
 
 class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def index() {
-        Noticia.withSession {
-            it.flush()
-            it.clear()
-        }
         if(!params.max) {
             params.max = 10
         }
-        [noticias: Noticia.list(params), noticiaCount: Noticia.count()]
+        [noticias: Noticia.list(params), noticiaCount: Noticia.count(), params:params]
     }
 
     @Secured('ROLE_ADMIN')
-    def create(Noticia noticia, NoticiaTraduccion traduccion) {
+    def create(Noticia noticia) {
         if(request.method == 'POST') {
             noticia.fechaPublicacion = new Date()
-            traduccion.titulo = noticia.titulo
-            traduccion.noticia = noticia
-            traduccion.lenguaje = 'Español'
-            if(noticia.validate() && traduccion.validate()) {
-                noticia.save(flush:true)
-                traduccion.save(flush:true)
+            if(noticia.save()) {
+                session.media.each {
+                    it.noticia = noticia
+                    it.save()
+                }
+                session.media = null
+                redirect action:'index'
+                return
+            }
+        } else {
+            session.media = []
+        }
+
+        [noticia:noticia]
+    }
+
+    @Secured('ROLE_ADMIN')
+    def update(Noticia noticia) {
+        if(request.method == 'POST') {
+            noticia.properties = params
+            if(noticia.save(flush:true)) {
                 redirect action:'index'
                 return
             }
         }
-        [noticia:noticia, traduccion:traduccion]
+        if(noticia) {
+            [noticia:noticia, medias: NoticiaMedia.findAll { eq('noticia', noticia)} ]
+        }
+    }
+
+    @Secured('ROLE_ADMIN')
+    def delete(Noticia noticia) {
+        println params
+        noticia.delete(flush:true)
+        redirect action:'index', params:params
     }
 
     @Secured('ROLE_ADMIN')
@@ -52,16 +73,6 @@ class NoticiaController {
       [traduccion:traduccion]
     }
 
-    @Secured('ROLE_ADMIN')
-    def update(Noticia noticia) {
-        if(request.method == 'POST') {
-            noticia.properties = params
-            if(noticia.save(flush:true)) {
-                redirect action:'index'
-            }
-        }
-        [noticia:noticia]
-    }
 
     @Secured('ROLE_ADMIN')
     def updateTraduccion(NoticiaTraduccion traduccion) {
@@ -82,29 +93,21 @@ class NoticiaController {
     }
 
     @Secured('ROLE_ADMIN')
-    def delete(Noticia noticia) {
-        noticia.delete(flush:true)
-        if(noticia) {
+    def saveMedia() {
+        def actividadMedia = new NoticiaMedia(params)
+        if(actividadMedia.save()) {
             response.status = 200
-        } else {
-            response.status = 400
-        }
-    }
-
-    @Secured('ROLE_ADMIN')
-    def saveMedia(NoticiaMedia media) {
-        NoticiaMedia.withSession {
-            it.flush()
-            it.clear()
-        }
-        if(request.method == 'POST') {
-            media.noticia = Noticia.get(params.noticiaObject)
-            if(media.save(flush:true)) {
-                redirect action: "update", id: media.noticia.id
-                return
+            render(contentType: "application/json") {
+                actividad(id: actividadMedia.id,
+                    tipo: actividadMedia.tipo, 
+                    ubicacion: actividadMedia.ubicacion, 
+                    'traduccionEspanol.pieMedia':actividadMedia.traduccionEspanol.pieMedia,
+                    'traduccionIngles.pieMedia':actividadMedia.traduccionEspanol.pieMedia)
             }
+        } else {
+            response.status = 204
+            return [] as JSON
         }
-        [noticiaObject:params.noticiaObject, media:media]
     }
 
     @Secured('ROLE_ADMIN')

@@ -6,6 +6,7 @@ class ActividadMedia {
     String ubicacion
     ActividadMediaTraduccion traduccionEspanol
     ActividadMediaTraduccion traduccionIngles
+    String datosAutor
 
     static belongsTo = [actividad:Actividad]
 
@@ -20,6 +21,7 @@ class ActividadMedia {
             }
         }
         actividad nullable:true, blank:true
+        datosAutor nullable:true, blank:true, size:5..400
     }
 }
 

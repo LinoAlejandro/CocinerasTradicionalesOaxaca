@@ -7,6 +7,7 @@ class NoticiaMedia {
     String pieMedia
     TraduccionMedia traduccionIngles
     TraduccionMedia traduccionEspanol
+    String datosAutor
 
     static embedded = ['traduccionIngles','traduccionEspanol']
     static belongsTo = [ noticia:Noticia ]
@@ -17,6 +18,8 @@ class NoticiaMedia {
         pieMedia nullable:true, blank:true, size:5..5000
         traduccionIngles nullable:true, blank:true
         traduccionEspanol nullable:true, blank:true
+        datosAutor nullable:true, blank:true, size:5..400
+        noticia nullable:true, blank:true
     }
 }
 

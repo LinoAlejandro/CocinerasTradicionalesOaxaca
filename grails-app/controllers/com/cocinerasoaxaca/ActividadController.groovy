@@ -18,8 +18,7 @@ class ActividadController {
     def create(Actividad actividad) {
         if(request.method == 'POST') {
             actividad.fechaPublicacion = new Date()
-            if(actividad.validate()) {
-                actividad.save()
+            if(actividad.save()) {
                 session.media.each {
                     it.actividad = actividad
                     it.save()
@@ -39,12 +38,20 @@ class ActividadController {
     def update(Actividad actividad) {
         if(request.method == 'POST') {
             actividad.properties = params
-            if(actividad.save()) {
+            if(actividad.save(flush:true)) {
                 redirect action:'index'
                 return
             }
         }
-        [actividad:actividad]
+        if(actividad) {
+            [actividad:actividad, medias: ActividadMedia.findAll { eq('actividad', actividad)} ]
+        }
+    }
+
+    @Secured('ROLE_ADMIN')
+    def delete(Actividad actividad) {
+        actividad.delete(flush:true)
+        redirect action:'index'
     }
 
     @Secured('ROLE_ADMIN')
@@ -65,86 +72,52 @@ class ActividadController {
     }
 
     @Secured('ROLE_ADMIN')
-    def updateTraduccion(ActividadTraduccion traduccion) {
-        if(request.method == 'POST') {
-            traduccion.properties = params
-            if(traduccion.save(flush:true)) {
-                redirect action:'update', params:[id:traduccion.actividad.id]
+    def saveMedia() {
+        println params
+        def actividadMedia = new ActividadMedia(params)
+        if(actividadMedia.save()) {
+            response.status = 200
+            render(contentType: "application/json") {
+                actividad(id: actividadMedia.id,
+                    tipo: actividadMedia.tipo, 
+                    ubicacion: actividadMedia.ubicacion, 
+                    'traduccionEspanol.pieMedia':actividadMedia.traduccionEspanol.pieMedia,
+                    'traduccionIngles.pieMedia':actividadMedia.traduccionEspanol.pieMedia,
+                    datosAutor:actividadMedia.datosAutor)
             }
+        } else {
+            response.status = 204
+            return [] as JSON
         }
-        [traduccion:traduccion]
     }
 
     @Secured('ROLE_ADMIN')
-    def deleteTraduccion(ActividadTraduccion traduccion) {
-        def actividad = traduccion.actividad
-        traduccion.delete(flush:true)
-        redirect action:'update', params:[id:actividad.id]
-    }
-
-    @Secured('ROLE_ADMIN')
-    def agregarTraduccion(ActividadTraduccion traduccion) {
-        if(request.method == 'POST') {
-            def actividad = Actividad.get(params.actividadObject)
-            traduccion.actividad = actividad
-            if(traduccion.validate()) {
-                def actividadValidacion = ActividadTraduccion.findByActividadAndLenguaje(actividad, traduccion.lenguaje)
-                if(!actividadValidacion) {
-                    traduccion.save(flush:true)
-                    redirect action:'update', params:[id:traduccion.actividad.id]
-                    return
-                }
+    def updateMedia(ActividadMedia actividadMedia) {
+        actividadMedia.properties = params
+        println params
+        if(actividadMedia.save(flush:true)) {
+            response.status = 200
+            render(contentType: 'application/json') {
+                actividad(id: actividadMedia.id,
+                    tipo: actividadMedia.tipo, 
+                    ubicacion: actividadMedia.ubicacion, 
+                    'traduccionEspanol.pieMedia': actividadMedia.traduccionEspanol.pieMedia,
+                    'traduccionIngles.pieMedia': actividadMedia.traduccionIngles.pieMedia,
+                    datosAutor:actividadMedia.datosAutor)
             }
+        } else {
+            response.status = 204
+            return [] as JSON
         }
-        params.actividadObject = params.actividadObject
-        params.offset = params.offset
-        [traduccion:traduccion]
     }
 
     @Secured('ROLE_ADMIN')
-    def delete(Actividad actividad) {
-        actividad.delete(flush:true)
-        redirect action:'index'
-    }
-
-    @Secured('ROLE_ADMIN')
-    def saveMedia(ActividadMedia media) {
-        ActividadMedia.withSession {
-            it.flush()
-            it.clear()
+    def deleteMedia(ActividadMedia actividadMedia) {
+        if(!actividadMedia.delete(flush:true)) {
+            response.status = 200
+        } else {
+            response.status = 204
         }
-        if(request.method == 'POST') {
-            media.actividad = Actividad.get(params.actividadObject)
-            if(media.save(flush:true)) {
-                redirect action: "update", id: media.actividad.id
-                return
-            }
-        }
-        [actividadObject:params.actividadObject, media:media]
-    }
-
-    @Secured('ROLE_ADMIN')
-    def updateMedia(ActividadMedia media) {
-        if(request.method == 'POST') {
-            media.properties = params
-            if(media.save(flush:true)) {
-                def actividad = media.actividad
-                redirect action: "update", params: [id:actividad.id]
-                return
-            }
-        }
-        [media:media]
-    }
-
-    @Secured('ROLE_ADMIN')
-    def deleteMedia(ActividadMedia media) {
-        def actividad = Actividad.get(media.actividad.id)
-        media.delete(flush:true)
-        ActividadMedia.withSession {
-            it.flush()
-            it.clear()
-        }
-        redirect action: "update", params: [id:actividad.id]
     }
 
     @Secured('permitAll')
@@ -160,24 +133,7 @@ class ActividadController {
     }
 
     @Secured('permitAll')
-    def list() {/*
-        Actividad.withSession {
-            it.flush()
-            it.clear()
-        }
-        if(!params.max) {
-            params.max=10
-        }
-
-        def actividadesMap = []
-        def actividades = Actividad.list(params)
-
-        actividades.each {
-            def map = [actividad:it, traduccion:ActividadTraduccion.findByActividadAndLenguaje(it, session.language ?: 'Español')]
-            actividadesMap.add(map)
-        }
-
-        [actividades:actividadesMap, actividadCount: Actividad.count()]*/
+    def list() {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT-5:00"));
         Date currentDate = calendar.getTime();
         Calendar cal = Calendar.getInstance();

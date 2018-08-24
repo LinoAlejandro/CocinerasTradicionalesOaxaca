@@ -65,7 +65,41 @@
               <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="font-size:18px">
               <div id="map" class="w-100" style="height:400px"></div>
             </div>
+            <div class="h4">
+              Media
+            </div>
+            <div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <td>Pie</td>
+                    <td>Ubicación</td>
+                    <td>Tipo</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody id="mediaTable">
+                  <g:each var="media" in="${medias}">
+                    <tr id="${media.id}">
+                      <td>${media.traduccionEspanol.pieMedia}</td>
+                      <input type="hidden" value="${media.traduccionIngles.pieMedia}">
+                      <td>${media.ubicacion}</td>
+                      <td>${media.tipo}</td>
+                      <input type="hidden" value="${media.datosAutor}">
+                      <td>
+                        <button type="button" class="btn btn-secondary" onclick="setUpdateData(this)" data-toggle="modal" data-target="#updateMediaModal">Actualizar</button>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger" onclick="deleteMedia(this)">Eliminar</button>
+                      </td>
+                    </tr>
+                  </g:each>
+                </tbody>
+              </table>
+            </div>
             <div class="form-group">
+              <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#saveMediaModal">Agregar media</button>
               <input type="submit" name="" value="Actualizar" class="btn btn-primary btn-md">
             </div>
           </div>
@@ -87,6 +121,94 @@
         </g:eachError>
       </div>
     </g:if>
+
+    <div class="modal fade" id="saveMediaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Crear elemento de media</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="hidden"></div>
+            <div class="form-group">
+              <label for="">Pie de media [Español] </label>
+              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
+            </div>
+            <div class="form-group">
+              <label for="">Pie de media [Inglés] </label>
+              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
+            </div>
+            <div class="form-group">
+              <label for="">Ubicación</label>
+              <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
+            </div>
+            <div class="form-group">
+              <label for="">Tipo</label>
+              <select name="tipo" id="tipo" class="form-control">
+                <option value="imagen">Imágen</option>
+                <option value="video">Video</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="">Autor</label>
+              <input type="text" class="form-control" id="datosAutor">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="saveMedia()">Crear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="updateMediaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Actualizar Media</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="idActividadMedia" />
+            <div id="hidden"></div>
+            <div class="form-group">
+              <label for="">Pie de media [Español] </label>
+              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanolUpdate"/>
+            </div>
+            <div class="form-group">
+              <label for="">Pie de media [Inglés] </label>
+              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaInglesUpdate"/>
+            </div>
+            <div class="form-group">
+              <label for="">Ubicación</label>
+              <input type="text" class="form-control" name="ubicación" id="ubicacionUpdate"/>
+            </div>
+            <div class="form-group">
+              <label for="">Tipo</label>
+              <select name="tipo" id="tipoUpdate" class="form-control" >
+                <option value="imagen">Imágen</option>
+                <option value="video">Video</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="">Autor</label>
+              <input type="text" class="form-control" id="datosAutorUpdate">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="updateMedia()">Actualizar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <asset:javascript src="richText/jquery.richtext.js" />
     <script type="text/javascript">
         $(document).ready(function() {
@@ -167,7 +289,151 @@
             lat.value = marker.getPosition().lat()
             lon.value = marker.getPosition().lng()
         })
+
+        var pieMediaEspanol = document.getElementById('pieMediaEspanol')
+        var pieMediaIngles = document.getElementById('pieMediaIngles')
+        var ubicacion = document.getElementById('ubicacion')
+        var tipo = document.getElementById('tipo')
+        var datosAutor = document.getElementById('datosAutor')
+        var mediaTable = document.getElementById('mediaTable')
+        var hidden = document.getElementById('hidden')
+
+        function saveMedia() {
+            var url = '${createLink(action:"saveMedia")}'
+
+            var datos = {
+              actividad: ${actividad.id},
+              'traduccionEspanol.pieMedia': pieMediaEspanol.value,
+              'traduccionIngles.pieMedia': pieMediaIngles.value,
+              ubicacion: ubicacion.value,
+              tipo: tipo.value,
+              datosAutor: datosAutor.value
+            }
+
+            $.post(url, datos, function(data, status) {
+                hidden.innerHTML = ''
+                var alert = document.createElement('div')
+                alert.classList.add('mb-4')
+
+                if(status == 'success') {
+                    var tr = document.createElement('tr')
+
+                    var pie = document.createElement('td')
+                    var ubicacion = document.createElement('td')
+                    var tipo = document.createElement('td')
+                    var tdModificar = document.createElement('td')
+                    var tdEliminar = document.createElement('td')
+
+                    var input = document.createElement('input')
+                    input.setAttribute('type', 'hidden')
+                    input.value = data.actividad['traduccionIngles.pieMedia'] ? data.actividad['traduccionIngles.pieMedia'] : ''
+
+                    var input2 = document.createElement('input')
+                    input2.setAttribute('type', 'hidden')
+                    input2.value = data.actividad.datosAutor ? data.actividad.datosAutor : ''
+
+                    var modificar = document.createElement('button')
+                    var eliminar = document.createElement('button')
+
+                    modificar.setAttribute('type', 'button')
+                    modificar.classList.add('btn')
+                    modificar.classList.add('btn-secondary')
+                    modificar.setAttribute('onclick', 'setUpdateData(this)')
+                    modificar.setAttribute('data-toggle', 'modal')
+                    modificar.setAttribute('data-target','#updateMediaModal')
+                    modificar.innerHTML = 'Actualizar'
+
+                    eliminar.setAttribute('type', 'button')
+                    eliminar.classList.add('btn')
+                    eliminar.classList.add('btn-danger')
+                    eliminar.setAttribute("onclick", "deleteMedia(this)")
+                    eliminar.innerHTML = 'Eliminar'
+
+                    tdModificar.appendChild(modificar)
+                    tdEliminar.appendChild(eliminar)
+
+                    pie.innerHTML = data.actividad['traduccionEspanol.pieMedia']
+                    ubicacion.innerHTML = data.actividad.ubicacion
+                    tipo.innerHTML = data.actividad.tipo
+
+                    tr.appendChild(pie)
+                    tr.appendChild(input)
+                    tr.appendChild(ubicacion)
+                    tr.appendChild(tipo)
+                    tr.appendChild(input2)
+                    tr.appendChild(tdModificar)
+                    tr.appendChild(tdEliminar)
+                    tr.id = data.actividad.id
+
+                    mediaTable.appendChild(tr)
+
+                    alert.classList.add('alert-success')
+                    alert.innerHTML = 'Media agregada'
+
+                } else if(status == 'nocontent') {
+                    
+                    alert.classList.add('alert-danger')
+                    alert.innerHTML = 'Algún dato de ingreso es incorrecto, revise su manual de usuario para mayor información'
+                    
+                }
+
+                hidden.appendChild(alert)
+            })
+        }
+
+        var idActividadMedia = document.getElementById('idActividadMedia')
+        var pieMediaEspanolUpdate = document.getElementById('pieMediaEspanolUpdate')
+        var pieMediaInglesUpdate = document.getElementById('pieMediaInglesUpdate')
+        var ubicacionUpdate = document.getElementById('ubicacionUpdate')
+        var tipoUpdate = document.getElementById('tipoUpdate')
+        var datosAutorUpdate = document.getElementById('datosAutorUpdate')
+
+        function setUpdateData(elm) {
+            var tr = elm.parentNode.parentNode
+            var childs = tr.children
+            idActividadMedia.value = tr.id
+            pieMediaEspanolUpdate.value = childs[0].innerHTML
+            pieMediaInglesUpdate.value = childs[1].value
+            ubicacionUpdate.value = childs[2].innerHTML
+            tipoUpdate.selectedIndex =  childs[3].innerHTML == 'imagen' ? "0" : "1"
+            datosAutorUpdate.value = childs[4].value
+        }
+
+        function deleteMedia(elm) {
+            var id = elm.parentNode.parentNode.id
+            var url = '${createLink(action:"deleteMedia")}'
+            $.post(url, {id:id} , function(data, status) {
+                if(status == 'success') {
+                    var tr = elm.parentNode.parentNode
+                    tr.parentNode.removeChild(tr)
+                }
+            })
+        }
+
+        function updateMedia() {
+            var url = '${createLink(action:"updateMedia")}'
+            var datos = {
+                id: idActividadMedia.value,
+                'traduccionEspanol.pieMedia': pieMediaEspanolUpdate.value,
+                'traduccionIngles.pieMedia': pieMediaInglesUpdate.value,
+                ubicacion: ubicacionUpdate.value,
+                tipo: tipoUpdate.value,
+                datosAutor: datosAutorUpdate.value
+            }
+
+            $.post(url, datos, function(data, status){
+                var tr = document.getElementById(data.actividad.id)
+                var childs = tr.children
+
+                childs[0].innerHTML = data.actividad['traduccionEspanol.pieMedia']
+                childs[1].value = data.actividad['traduccionIngles.pieMedia']
+                childs[2].innerHTML = data.actividad.ubicacion
+                childs[3].innerHTML = data.actividad.tipo
+                childs[4].value = data.actividad.datosAutor
+            })
+        }
     </script>
 
   </body>
 </html>
+
