@@ -93,10 +93,14 @@
                 <option value="video">Video</option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="">Autor</label>
+              <input type="text" class="form-control" name="datosAutor" id="datosAutor"/>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="addMedia()">Crear</button>
+            <button type="button" class="btn btn-primary" onclick="saveMedia()">Crear</button>
           </div>
         </div>
       </div>
@@ -128,12 +132,12 @@
           idNoticia.value = el.parentNode.parentNode.id
       }
 
-      function addMedia() {
-
+      function saveMedia() {
           var pieMediaEspanol = document.getElementById('pieMediaEspanol')
           var pieMediaIngles = document.getElementById('pieMediaIngles')
           var ubicacion = document.getElementById('ubicacion')
           var tipo = document.getElementById('tipo')
+          var datosAutor = document.getElementById('datosAutor')
 
           var url = "${createLink(action:'saveMedia')}"
           var data = {
@@ -141,7 +145,8 @@
               'traduccionEspanol.pieMedia': pieMediaEspanol.value,
               'traduccionIngles.pieMedia': pieMediaIngles.value,
               ubicacion: ubicacion.value,
-              tipo: tipo.value
+              tipo: tipo.value,
+              datosAutor: datosAutor.value
           } 
 
           $.post(url, data, function(data, status ){

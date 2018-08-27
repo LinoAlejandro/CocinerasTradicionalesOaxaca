@@ -21,10 +21,26 @@
               <input type="text" name="traduccionEspanol.titulo" value="${noticia?.traduccionEspanol?.titulo}" class="form-control" />
             </div>
             <div class="form-group">
+              <label for="traduccionEspanol.subtitulo">Subtítulo</label>
+              <textarea name="traduccionEspanol.subtitulo" class="form-control">${noticia?.traduccionEspanol?.subtitulo}</textarea>
+            </div>
+            <div class="form-group">
               <label for="contenido">Descripción</label>
-              <textarea class="contentEspanol" type="text" name="traduccionEspanol.contenido" class="form-control">
+              <textarea class="contentEspanol" name="traduccionEspanol.contenido" class="form-control">
                 ${raw(noticia?.traduccionEspanol?.contenido)}
               </textarea>
+            </div>
+            <div class="form-group">
+              <label for="">Tipo</label>
+              <select name="tipo" id="" class="form-control">
+                <option value="Artículo">Artículo</option>
+                <option value="Boletín">Boletín</option>
+                <option value="Noticia">Noticia</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="">Imágen de Portada</label>
+              <input type="text" name="ubicacionImagen" class="form-control"/>
             </div>
             <hr class="my-3 bg-dark">
             <div class="h4">
@@ -35,8 +51,12 @@
               <input type="text" name="traduccionIngles.titulo" value="${noticia?.traduccionIngles?.titulo}" class="form-control" />
             </div>
             <div class="form-group">
+              <label for="raduccionIngles.subtitulo">Subtítulo</label>
+              <textarea name="traduccionIngles.subtitulo" class="form-control">${noticia?.traduccionIngles?.subtitulo}</textarea>
+            </div>
+            <div class="form-group">
               <label for="contenido">Descripción</label>
-              <textarea class="contentIngles" type="text" name="traduccionIngles.contenido" class="form-control">
+              <textarea class="contentIngles" name="traduccionIngles.contenido" class="form-control">
                 ${raw(noticia?.traduccionIngles?.contenido)}
               </textarea>
             </div>
@@ -67,7 +87,7 @@
                   </tr>
                 </thead>
                 <tbody id="mediaTable">
-                  <g:each var="media" in="${session.media?}">
+                  <g:each var="media" in="${session.mediaNoticia}">
                     <tr>
                       <td>${media.traduccionEspanol.pieMedia}</td>
                       <td>${media.ubicacion}</td>
@@ -117,6 +137,10 @@
                 <option value="video">Video</option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="">Autor</label>
+              <input type="text" class="form-control" id="datosAutor">
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -132,16 +156,19 @@
       var pieMediaIngles = document.getElementById('pieMediaIngles')
       var ubicacion = document.getElementById('ubicacion')
       var tipo = document.getElementById('tipo')
+      var datosAutor = document.getElementById('datosAutor')
       var mediaTable = document.getElementById('mediaTable')
       var hidden = document.getElementById('hidden')
 
       function addMedia() {
-          $.post("${createLink(action:'addMedia')}" ,
-              {'traduccionEspanol.pieMedia': pieMediaEspanol.value,
+          var url = "${createLink(action:'addMedia')}"
+          var datos = {'traduccionEspanol.pieMedia': pieMediaEspanol.value,
               'traduccionIngles.pieMedia': pieMediaIngles.value,
               ubicacion: ubicacion.value,
-              tipo: tipo.value} ,
-              function(data, status) {
+              tipo: tipo.value,
+              datosAutor: datosAutor.value}
+
+          $.post( url, datos, function(data, status) {
                   hidden.innerHTML = ''
                   var alert = document.createElement('div')
                   alert.classList.add('mb-4')

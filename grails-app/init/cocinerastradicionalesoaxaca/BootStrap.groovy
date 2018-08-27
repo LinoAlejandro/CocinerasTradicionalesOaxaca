@@ -15,6 +15,7 @@ import com.cocinerasoaxaca.Cocinera
 
 class BootStrap {
     def init = { servletContext ->
+        /*
         def admin = new User(username:'admin', password:'admin').save()
         def roleAdmin = new Role(authority:'ROLE_ADMIN').save()
 
@@ -428,7 +429,7 @@ class BootStrap {
                 'Fusce ullamcorper sem at nisi euismod, at pretium quam condimentum. Fusce rutrum eros sit amet diam venenatis gravida. Morbi ac dictum dolor, sed gravida tortor. Fusce nec sapien justo. Vestibulum in porttitor ligula. Aenean id lacus mattis, sagittis massa vel, consectetur mi. Aliquam porta nisi porttitor leo facilisis condimentum. Phasellus porttitor ante eget magna pharetra, in lobortis neque hendrerit. Ut tristique, nibh quis vestibulum dictum, neque magna laoreet est, at rhoncus lorem sem quis velit. Nulla laoreet pretium urna. Sed ultricies sem ut sodales varius. Curabitur non tristique felis. Duis sodales arcu mauris, eget volutpat diam tempus vitae. In sed erat vestibulum dolor feugiat laoreet quis et mauris.' +
                 'Etiam ac vestibulum neque. Vestibulum nec mollis tellus. Nam in ultrices mi. Mauris gravida venenatis dui id dignissim. Nulla non enim non mi vestibulum faucibus vel condimentum ex. Aliquam maximus at enim non egestas. Etiam venenatis nulla nulla, vel malesuada metus sagittis sed. Cras molestie magna nibh, sit amet ullamcorper tortor luctus quis. Morbi pretium pulvinar nunc nec feugiat. Aliquam ac augue finibus, pretium odio in, ornare erat. Ut at felis orci. Integer lacus tellus, congue ut   mauris quis, iaculis mollis augue.'
                 )
-        ).save()
+        ).save()*/
     }
 
     def destroy = {

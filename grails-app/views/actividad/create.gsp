@@ -32,7 +32,7 @@
             </div>
             <div class="form-group">
               <label for="contenido">Descripción</label>
-              <textarea class="contentEspanol" type="text" name="traduccionEspanol.contenido" class="form-control">
+              <textarea class="contentEspanol" name="traduccionEspanol.contenido" class="form-control">
                 ${raw(actividad?.traduccionEspanol?.contenido)}
               </textarea>
             </div>
@@ -46,7 +46,7 @@
             </div>
             <div class="form-group">
               <label for="contenido">Descripción</label>
-              <textarea class="contentIngles" type="text" name="traduccionIngles.contenido" class="form-control">
+              <textarea class="contentIngles" name="traduccionIngles.contenido" class="form-control">
                 ${raw(actividad?.traduccionIngles?.contenido)}
               </textarea>
             </div>

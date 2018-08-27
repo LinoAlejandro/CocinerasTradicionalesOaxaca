@@ -44,6 +44,6 @@ class ActividadTraduccion {
 
     static constraints = {
         titulo size:0..900, nullable:true, blank:true
-        contenido size:10..30000, nullable:true, blank:true
+        contenido size:10..50000, nullable:true, blank:true
     }
 }

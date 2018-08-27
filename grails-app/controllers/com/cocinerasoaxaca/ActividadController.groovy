@@ -43,9 +43,7 @@ class ActividadController {
                 return
             }
         }
-        if(actividad) {
-            [actividad:actividad, medias: ActividadMedia.findAll { eq('actividad', actividad)} ]
-        }
+        [actividad:actividad, medias: ActividadMedia.findAll { eq('actividad', actividad)} ]
     }
 
     @Secured('ROLE_ADMIN')

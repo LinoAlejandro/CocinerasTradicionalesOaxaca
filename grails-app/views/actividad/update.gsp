@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
               <label for="contenido">Descripción</label>
-              <textarea class="contentEspanol" type="text" name="traduccionEspanol.contenido" class="form-control">
+              <textarea class="contentEspanol" name="traduccionEspanol.contenido" class="form-control">
                 ${raw(actividad.traduccionEspanol?.contenido)}
               </textarea>
             </div>
@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
               <label for="contenido">Descripción</label>
-              <textarea class="contentIngles" type="text" name="traduccionIngles.contenido" class="form-control">
+              <textarea class="contentIngles" name="traduccionIngles.contenido" class="form-control">
                 ${raw(actividad?.traduccionIngles?.contenido)}
               </textarea>
             </div>
@@ -175,6 +175,7 @@
             </button>
           </div>
           <div class="modal-body">
+            <div id="hiddenUpdate"></div>
             <input type="hidden" id="idActividadMedia" />
             <div id="hidden"></div>
             <div class="form-group">
@@ -387,6 +388,7 @@
         var ubicacionUpdate = document.getElementById('ubicacionUpdate')
         var tipoUpdate = document.getElementById('tipoUpdate')
         var datosAutorUpdate = document.getElementById('datosAutorUpdate')
+        var hiddenUpdate = document.getElementById('hiddenUpdate')
 
         function setUpdateData(elm) {
             var tr = elm.parentNode.parentNode
@@ -411,6 +413,11 @@
         }
 
         function updateMedia() {
+
+            var div = document.createElement('div')
+            div.classList.add('mb-4')
+            hiddenUpdate.innerHTML = ''
+
             var url = '${createLink(action:"updateMedia")}'
             var datos = {
                 id: idActividadMedia.value,
@@ -422,14 +429,24 @@
             }
 
             $.post(url, datos, function(data, status){
-                var tr = document.getElementById(data.actividad.id)
-                var childs = tr.children
+                if(status == 'success') {
+                    var tr = document.getElementById(data.actividad.id)
+                    var childs = tr.children
 
-                childs[0].innerHTML = data.actividad['traduccionEspanol.pieMedia']
-                childs[1].value = data.actividad['traduccionIngles.pieMedia']
-                childs[2].innerHTML = data.actividad.ubicacion
-                childs[3].innerHTML = data.actividad.tipo
-                childs[4].value = data.actividad.datosAutor
+                    childs[0].innerHTML = data.actividad['traduccionEspanol.pieMedia']
+                    childs[1].value = data.actividad['traduccionIngles.pieMedia']
+                    childs[2].innerHTML = data.actividad.ubicacion
+                    childs[3].innerHTML = data.actividad.tipo
+                    childs[4].value = data.actividad.datosAutor
+
+                    div.classList.add('alert-success')
+                    div.innerHTML = "Media actualizada"
+                } else {
+                    div.classList.add('alert-danger')
+                    div.innerHTML = "ERROR al momento de actualizar, consulte su manual de usuario"
+                }
+
+                hiddenUpdate.appendChild(div)
             })
         }
     </script>

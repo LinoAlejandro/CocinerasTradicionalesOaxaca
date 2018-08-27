@@ -18,16 +18,17 @@ class NoticiaController {
         if(request.method == 'POST') {
             noticia.fechaPublicacion = new Date()
             if(noticia.save()) {
-                session.media.each {
+                println session.mediaNoticia.size()
+                session.mediaNoticia.each {
                     it.noticia = noticia
-                    it.save()
+                    println it.save()
                 }
-                session.media = null
+                session.mediaNoticia = null
                 redirect action:'index'
                 return
             }
         } else {
-            session.media = []
+            session.mediaNoticia = []
         }
 
         [noticia:noticia]
@@ -49,60 +50,41 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def delete(Noticia noticia) {
-        println params
         noticia.delete(flush:true)
         redirect action:'index', params:params
     }
 
     @Secured('ROLE_ADMIN')
-    def agregarTraduccion(NoticiaTraduccion traduccion) {
-      if(request.method == 'POST') {
-          def noticia = Noticia.get(params.noticiaObject)
-          traduccion.noticia = noticia
-          if(traduccion.validate()) {
-              def noticiaValidacion = NoticiaTraduccion.findByNoticiaAndLenguaje(noticia, traduccion.lenguaje)
-              if(!noticiaValidacion) {
-                  traduccion.save(flush:true)
-                  redirect action:'update', params:[id:traduccion.noticia.id]
-                  return
-              }
-          }
-      }
-      params.noticiaObject = params.noticiaObject
-      params.offset = params.offset
-      [traduccion:traduccion]
-    }
-
-
-    @Secured('ROLE_ADMIN')
-    def updateTraduccion(NoticiaTraduccion traduccion) {
-        if(request.method == 'POST') {
-            traduccion.properties = params
-            if(traduccion.save(flush:true)) {
-                redirect action:'update', params:[id:traduccion.noticia.id]
+    def addMedia() {
+        def noticiaMedia = new NoticiaMedia(params)
+        if(noticiaMedia.validate()) {
+            session.mediaNoticia.add(noticiaMedia)
+            response.status = 200
+            render(contentType: "application/json") {
+                noticia(tipo: noticiaMedia.tipo, 
+                    ubicacion: noticiaMedia.ubicacion, 
+                    'traduccionEspanol.pieMedia':noticiaMedia.traduccionEspanol.pieMedia)
             }
+        } else {
+            response.status = 204
+            return [] as JSON
         }
-        [traduccion:traduccion]
-    }
-
-    @Secured('ROLE_ADMIN')
-    def deleteTraduccion(NoticiaTraduccion traduccion) {
-        def noticia = traduccion.noticia
-        traduccion.delete(flush:true)
-        redirect action:'update', params:[id:noticia.id]
     }
 
     @Secured('ROLE_ADMIN')
     def saveMedia() {
-        def actividadMedia = new NoticiaMedia(params)
-        if(actividadMedia.save()) {
+        def noticiaMedia = new NoticiaMedia(params)
+        println noticiaMedia.validate()
+        println noticiaMedia.errors
+        if(noticiaMedia.save()) {
             response.status = 200
             render(contentType: "application/json") {
-                actividad(id: actividadMedia.id,
-                    tipo: actividadMedia.tipo, 
-                    ubicacion: actividadMedia.ubicacion, 
-                    'traduccionEspanol.pieMedia':actividadMedia.traduccionEspanol.pieMedia,
-                    'traduccionIngles.pieMedia':actividadMedia.traduccionEspanol.pieMedia)
+                noticia(id: noticiaMedia.id,
+                    tipo: noticiaMedia.tipo, 
+                    ubicacion: noticiaMedia.ubicacion, 
+                    'traduccionEspanol.pieMedia':noticiaMedia.traduccionEspanol.pieMedia,
+                    'traduccionIngles.pieMedia':noticiaMedia.traduccionEspanol.pieMedia,
+                    datosAutor:noticiaMedia.datosAutor)
             }
         } else {
             response.status = 204
@@ -112,50 +94,32 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def updateMedia(NoticiaMedia media) {
-        if(request.method == 'POST') {
-            media.properties = params
-            if(media.save(flush:true)) {
-                def noticia = media.noticia
-                redirect action: "update", params: [id:noticia.id]
-                return
+        media.properties = params
+        println params
+        if(media.save(flush:true)) {
+            response.status = 200
+            render(contentType: 'application/json') {
+                noticia(id: media.id,
+                    tipo: media.tipo, 
+                    ubicacion: media.ubicacion, 
+                    'traduccionEspanol.pieMedia': media.traduccionEspanol.pieMedia,
+                    'traduccionIngles.pieMedia': media.traduccionIngles.pieMedia,
+                    datosAutor: media.datosAutor)
             }
+        } else {
+            response.status = 204
+            return [] as JSON
         }
-        [media:media]
     }
 
     @Secured('ROLE_ADMIN')
     def deleteMedia(NoticiaMedia media) {
-        def noticia = Noticia.get(media.noticia.id)
-        media.delete(flush:true)
-        NoticiaMedia.withSession {
-            it.flush()
-            it.clear()
+        if(!media.delete(flush:true)) {
+            response.status = 200
+        } else {
+            response.status = 204
         }
-        redirect action: "update", params: [id:noticia.id]
     }
-
-    /*
-    @Secured('permitAll')
-    def list() {
-        Noticia.withSession {
-            it.flush()
-            it.clear()
-        }
-
-        if(!params.max) {
-            params.max=10
-        }
-
-        def noticiasMap = []
-        def noticias = Noticia.list(params)
-
-        noticias.each {
-            def map = [noticia:it, traduccion:NoticiaTraduccion.findByNoticiaAndLenguaje(it, session.language)]
-            noticiasMap.add(map)
-        }
-
-        [noticias: noticiasMap, noticiaCount: Noticia.count()]
-    }*/
 
     @Secured('permitAll')
     def listarticulos() {
