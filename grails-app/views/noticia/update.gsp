@@ -172,7 +172,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="hiddenUpdate"></div>
+            <div id="hiddenUpdate"></div>
             <input type="hidden" id="idNoticiaMedia" />
             <div class="form-group">
               <label for="">Pie de media [Español] </label>
@@ -218,48 +218,87 @@
       var hidden = document.getElementById('hidden')
 
       function saveMedia() {
-          var url = "${createLink(action:'saveMedia')}"
-          var datos = {noticia:${noticia.id},
+            var url = '${createLink(action:"saveMedia")}'
+
+            var datos = {
+              noticia: ${noticia.id},
               'traduccionEspanol.pieMedia': pieMediaEspanol.value,
               'traduccionIngles.pieMedia': pieMediaIngles.value,
               ubicacion: ubicacion.value,
               tipo: tipo.value,
-              datosAutor: datosAutor.value}
+              datosAutor: datosAutor.value
+            }
 
-          $.post( url, datos, function(data, status) {
-              console.log(data, status)
-              hidden.innerHTML = ''
-              var alert = document.createElement('div')
-              alert.classList.add('mb-4')
-              if(status == 'success') {
-                  var tr = document.createElement('tr')
+            $.post(url, datos, function(data, status) {
+                hidden.innerHTML = ''
+                var alert = document.createElement('div')
+                alert.classList.add('mb-4')
 
-                  var pie = document.createElement('td')
-                  var ubicacion = document.createElement('td')
-                  var tipo = document.createElement('td')
+                if(status == 'success') {
+                    var tr = document.createElement('tr')
 
-                  pie.innerHTML = data.noticia['traduccionEspanol.pieMedia']
-                  ubicacion.innerHTML = data.noticia.ubicacion
-                  tipo.innerHTML = data.noticia.tipo
+                    var pie = document.createElement('td')
+                    var ubicacion = document.createElement('td')
+                    var tipo = document.createElement('td')
+                    var tdModificar = document.createElement('td')
+                    var tdEliminar = document.createElement('td')
 
-                  tr.appendChild(pie)
-                  tr.appendChild(ubicacion)
-                  tr.appendChild(tipo)
+                    var input = document.createElement('input')
+                    input.setAttribute('type', 'hidden')
+                    input.value = data.noticia['traduccionIngles.pieMedia'] ? data.noticia['traduccionIngles.pieMedia'] : ''
 
-                  mediaTable.appendChild(tr)
+                    var input2 = document.createElement('input')
+                    input2.setAttribute('type', 'hidden')
+                    input2.value = data.noticia.datosAutor ? data.noticia.datosAutor : ''
 
-                  alert.classList.add('alert-success')
-                  alert.innerHTML = 'Media agregada temporalmente'
-                  
-              } else if(status == 'nocontent') {
+                    var modificar = document.createElement('button')
+                    var eliminar = document.createElement('button')
 
-                  alert.classList.add('alert-danger')
-                  alert.innerHTML = 'Algún dato de ingreso es incorrecto, revise su manual de usuario para mayor información'
-              }
+                    modificar.setAttribute('type', 'button')
+                    modificar.classList.add('btn')
+                    modificar.classList.add('btn-secondary')
+                    modificar.setAttribute('onclick', 'setUpdateData(this)')
+                    modificar.setAttribute('data-toggle', 'modal')
+                    modificar.setAttribute('data-target','#updateMediaModal')
+                    modificar.innerHTML = 'Actualizar'
 
-              hidden.appendChild(alert)
-          })
-      }
+                    eliminar.setAttribute('type', 'button')
+                    eliminar.classList.add('btn')
+                    eliminar.classList.add('btn-danger')
+                    eliminar.setAttribute("onclick", "deleteMedia(this)")
+                    eliminar.innerHTML = 'Eliminar'
+
+                    tdModificar.appendChild(modificar)
+                    tdEliminar.appendChild(eliminar)
+
+                    pie.innerHTML = data.noticia['traduccionEspanol.pieMedia']
+                    ubicacion.innerHTML = data.noticia.ubicacion
+                    tipo.innerHTML = data.noticia.tipo
+
+                    tr.appendChild(pie)
+                    tr.appendChild(input)
+                    tr.appendChild(ubicacion)
+                    tr.appendChild(tipo)
+                    tr.appendChild(input2)
+                    tr.appendChild(tdModificar)
+                    tr.appendChild(tdEliminar)
+                    tr.id = data.noticia.id
+
+                    mediaTable.appendChild(tr)
+
+                    alert.classList.add('alert-success')
+                    alert.innerHTML = 'Media agregada'
+
+                } else if(status == 'nocontent') {
+                    
+                    alert.classList.add('alert-danger')
+                    alert.innerHTML = 'Algún dato de ingreso es incorrecto, revise su manual de usuario para mayor información'
+                    
+                }
+
+                hidden.appendChild(alert)
+            })
+        }
 
       var idNoticiaMedia = document.getElementById('idNoticiaMedia')
       var pieMediaEspanolUpdate = document.getElementById('pieMediaEspanolUpdate')
@@ -293,7 +332,7 @@
 
       function updateMedia() {
           var div = document.createElement('div')
-          div.classList.appendChild('mb-4')
+          div.classList.add('mb-4')
           hiddenUpdate.innerHTML = ''
           var url = '${createLink(action:"updateMedia")}'
           var datos = {

@@ -21,7 +21,7 @@ dependencies:
 - file:/home/limbo/.gradle/caches/modules-2/files-2.1/org.grails.plugins/gsp/3.3.1/7b40598abe73d8535b2dd4503467d5c0c415b7b5/gsp-3.3.1.jar
 - file:/home/limbo/.gradle/caches/modules-2/files-2.1/org.grails.plugins/spring-security-core/3.2.1/787fbf150eed167b226be8cc3d7c84d0370a5eaa/spring-security-core-3.2.1.jar
 - file:/home/limbo/.gradle/caches/modules-2/files-2.1/org.grails.plugins/grails-melody-plugin/1.73.1/c9ae31d3de4067d7cff4477cf041cff970008f38/grails-melody-plugin-1.73.1.jar
-- file:/home/limbo/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.4/a60e0a6de16ad99bcd1aa954034b825ddc0b5ebf/mysql-connector-java-5.1.4.jar
+- file:/home/limbo/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/5.1.37/2c378637f6faff77541244e8257b446f04324bd8/mysql-connector-java-5.1.37.jar
 - file:/home/limbo/.gradle/caches/modules-2/files-2.1/org.glassfish.web/el-impl/2.1.2-b03/6bab1211b6e6b191fdbf06067bd05d2f75a62ac0/el-impl-2.1.2-b03.jar
 - file:/home/limbo/.gradle/caches/modules-2/files-2.1/com.h2database/h2/1.4.197/bb391050048ca8ae3e32451b5a3714ecd3596a46/h2-1.4.197.jar
 - file:/home/limbo/.gradle/caches/modules-2/files-2.1/org.apache.tomcat/tomcat-jdbc/8.5.31/7caa97fbe2765d3ed89adc036b852cc46456e415/tomcat-jdbc-8.5.31.jar

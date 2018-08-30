@@ -12,7 +12,8 @@ class Noticia {
     NoticiaTraduccion traduccionEspanol
     NoticiaTraduccion traduccionIngles
 
-    static hasMany = [media:NoticiaMedia]
+    static hasMany = [media : NoticiaMedia]
+
     static embedded = ['traduccionEspanol', 'traduccionIngles']
 
     static constraints = {
@@ -23,10 +24,10 @@ class Noticia {
         longitud nullable:true, blank:true
         latitud nullable:true, blank:true
         traduccionEspanol validator: { val, obj ->
-            if(val.titulo == null) {
-                return 'traduccionEspanol.titulo.null'
-            } else if(val.contenido == null) {
-                return 'traduccionEspanol.contenido.null'
+            if(val.titulo == null || val.contenido == null) {
+                return 'traduccionNoticia.null'
+            } else if((val.titulo.size() < 5 || val.titulo.size() > 400) || (val.contenido.size() < 5 || val.contenido.size() > 50000)) {
+                return 'traduccionNoticia.size'
             }
         }
         traduccionIngles nullable:true, blank:true
@@ -35,16 +36,17 @@ class Noticia {
     static mapping = {
         sort fechaPublicacion:'desc'
     }
-}
 
-class NoticiaTraduccion {
-    String titulo
-    String subtitulo
-    String contenido
+    static class NoticiaTraduccion {
+        String titulo
+        String subtitulo
+        String contenido
 
-    static constraints = {
-        titulo size:0..900, nullable:true, blank:true
-        subtitulo size:0..1500, nullable:true, blank:true
-        contenido size:0..50000, nullable:true, blank:true
+        static constraints = {
+            titulo size:5..200, nullable:true, blank:true
+            subtitulo size:5..350, nullable:true, blank:true
+            contenido size:50..18000, nullable:true, blank:true
+        }
     }
 }
+

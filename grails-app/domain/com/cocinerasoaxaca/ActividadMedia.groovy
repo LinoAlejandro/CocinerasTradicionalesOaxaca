@@ -7,8 +7,8 @@ class ActividadMedia {
     ActividadMediaTraduccion traduccionEspanol
     ActividadMediaTraduccion traduccionIngles
     String datosAutor
-
-    static belongsTo = [actividad:Actividad]
+    
+    static belongsTo = [ actividad : Actividad ]
 
     static embedded = ['traduccionEspanol', 'traduccionIngles']
 
@@ -23,12 +23,13 @@ class ActividadMedia {
         actividad nullable:true, blank:true
         datosAutor nullable:true, blank:true, size:5..400
     }
-}
 
-class ActividadMediaTraduccion {
-    String pieMedia
+    static class ActividadMediaTraduccion {
+        String pieMedia
 
-    static constraints = {
-        pieMedia nullable:true, blank:true, size:5..5000
+        static constraints = {
+            pieMedia nullable:true, blank:true, size:5..5000
+        }
     }
 }
+

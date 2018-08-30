@@ -413,7 +413,6 @@
         }
 
         function updateMedia() {
-
             var div = document.createElement('div')
             div.classList.add('mb-4')
             hiddenUpdate.innerHTML = ''
@@ -428,7 +427,7 @@
                 datosAutor: datosAutorUpdate.value
             }
 
-            $.post(url, datos, function(data, status){
+            $.post(url, datos, function(data, status) {
                 if(status == 'success') {
                     var tr = document.getElementById(data.actividad.id)
                     var childs = tr.children

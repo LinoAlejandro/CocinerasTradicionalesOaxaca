@@ -1,41 +1,33 @@
 package com.cocinerasoaxaca
 
 class Platillo {
-    String nombrePlatillo
-    String ubicacionmedia
-    String premio
-    String convocatoria
-    PlatilloTraduccion traduccionEspanol
-    PlatilloTraduccion traduccionIngles
-
-    static belongsTo = [cocinera:Cocinera]
-
-    static embedded = ['traduccionEspanol','traduccionIngles']
-
-    static constraints = {
-        nombrePlatillo size:0..1000
-        ubicacionmedia nullable:true, size:5..5000
-        premio nullable:true, blank:true
-        traduccionIngles nullable:true, blank:true
-        traduccionEspanol validator: { val, obj ->
-
-            if(val.ingredientes == null) {
-                return 'traduccionEspanol.titulo.null'
-            } else if (val.tipoPlatillo == null) {
-                return 'traduccionEspanol.contenido.null'
-            } 
-        }
-    }
-}
-
-class PlatilloTraduccion {
-    String ingredientes
+    String nombre
     String tipoPlatillo
+    String historia
+    String razonPorPlatillo
+    String modoPreparacion
+    String formaConsumirPlatillo
+    String tipoPreparacion
+    String origen
+    String rendimiento
+    String consumo
+    Collection ingredientes
+    Collection premios
 
     static belongsTo = [cocinera:Cocinera]
 
+    static hasMany = [ingredientes:String, premios:Posicion]
+
     static constraints = {
-        ingredientes size:0..5000, nullable:true, blank:true
-        tipoPlatillo inList: ['cotidiano','ceremonial'], nullable:true, blank:true
+        nombre size:5..300
+        tipoPlatillo inList:['cotidiano', 'ceremonial']
+        historia size:5..550
+        razonPorPlatillo size:5..550
+        modoPreparacion size:5..550
+        formaConsumirPlatillo size:5..550
+        tipoPreparacion size:5..550
+        origen size:5..550
+        rendimiento size:5..550
+        consumo size:5..550
     }
 }

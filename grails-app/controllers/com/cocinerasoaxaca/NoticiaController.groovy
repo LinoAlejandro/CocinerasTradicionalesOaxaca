@@ -1,16 +1,18 @@
 package com.cocinerasoaxaca
 import grails.plugin.springsecurity.annotation.Secured
-import java.text.SimpleDateFormat
 import grails.converters.JSON
+import java.text.SimpleDateFormat
 
 class NoticiaController {
+
+    def sessionFactory
 
     @Secured('ROLE_ADMIN')
     def index() {
         if(!params.max) {
             params.max = 10
         }
-        [noticias: Noticia.list(params), noticiaCount: Noticia.count(), params:params]
+        [noticias: Noticia.findAll(params), noticiaCount: Noticia.count(), params:params]
     }
 
     @Secured('ROLE_ADMIN')
@@ -18,11 +20,15 @@ class NoticiaController {
         if(request.method == 'POST') {
             noticia.fechaPublicacion = new Date()
             if(noticia.save()) {
-                println session.mediaNoticia.size()
+                def sesion = sessionFactory.currentSession
+                def query = "INSERT INTO noticia_media(version, tipo, noticia_id, ubicacion, datos_autor, traduccion_espanol_pie_media, traduccion_ingles_pie_media) VALUES"
                 session.mediaNoticia.each {
-                    it.noticia = noticia
-                    println it.save()
+                    query = query + " (0,'" + it.tipo + "', " + noticia.id + ", '" + it.ubicacion + "', '" + it.datosAutor + "', '" + it.traduccionEspanol.pieMedia + "', '" + it.traduccionIngles.pieMedia +  "'),"
+                    it.actividad = actividad
+                    it.save()
                 }
+                query = query.substring(0,query.size() - 1) + ";"
+                def sqlQuery = sesion.createSQLQuery(query)
                 session.mediaNoticia = null
                 redirect action:'index'
                 return
@@ -49,8 +55,11 @@ class NoticiaController {
     }
 
     @Secured('ROLE_ADMIN')
-    def delete(Noticia noticia) {
-        noticia.delete(flush:true)
+    def delete() {
+        def query = 'DELETE FROM NoticiaMedia where noticia.id = ' + Long.parseLong(params.id)
+        def update = NoticiaMedia.executeUpdate(query)
+        query = 'DELETE FROM Noticia where id = ' + Long.parseLong(params.id)
+        update = Noticia.executeUpdate(query)
         redirect action:'index', params:params
     }
 
@@ -72,10 +81,7 @@ class NoticiaController {
     }
 
     @Secured('ROLE_ADMIN')
-    def saveMedia() {
-        def noticiaMedia = new NoticiaMedia(params)
-        println noticiaMedia.validate()
-        println noticiaMedia.errors
+    def saveMedia(NoticiaMedia noticiaMedia) {
         if(noticiaMedia.save()) {
             response.status = 200
             render(contentType: "application/json") {
@@ -94,17 +100,29 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def updateMedia(NoticiaMedia media) {
-        media.properties = params
-        println params
-        if(media.save(flush:true)) {
+        def update = NoticiaMedia.executeUpdate(
+            'update NoticiaMedia set ' +  
+            'tipo=:tipo, ' + 
+            'ubicacion=:ubicacion, ' + 
+            'traduccionEspanol.pieMedia=:pieEspanol, ' + 
+            'traduccionIngles.pieMedia=:pieIngles, ' + 
+            'datosAutor=:datosAutor ' + 
+            'where id=:id', 
+            [tipo: params.tipo,
+             ubicacion: params.ubicacion,
+             pieEspanol: params['traduccionEspanol.pieMedia'],
+             pieIngles: params['traduccionIngles.pieMedia'],
+             datosAutor: params.datosAutor,
+             id: Long.parseLong(params.id)])
+        if(update > 0) {
             response.status = 200
             render(contentType: 'application/json') {
-                noticia(id: media.id,
-                    tipo: media.tipo, 
-                    ubicacion: media.ubicacion, 
-                    'traduccionEspanol.pieMedia': media.traduccionEspanol.pieMedia,
-                    'traduccionIngles.pieMedia': media.traduccionIngles.pieMedia,
-                    datosAutor: media.datosAutor)
+                noticia(id: params.id,
+                    tipo: params.tipo, 
+                    ubicacion: params.ubicacion, 
+                    'traduccionEspanol.pieMedia': params['traduccionEspanol.pieMedia'],
+                    'traduccionIngles.pieMedia': params['traduccionIngles.pieMedia'],
+                    datosAutor: params.datosAutor)
             }
         } else {
             response.status = 204
@@ -113,8 +131,9 @@ class NoticiaController {
     }
 
     @Secured('ROLE_ADMIN')
-    def deleteMedia(NoticiaMedia media) {
-        if(!media.delete(flush:true)) {
+    def deleteMedia() {
+        def update = NoticiaMedia.executeUpdate('delete from NoticiaMedia where id=:id', [id:Long.parseLong(params.id)])
+        if(update > 0) {
             response.status = 200
         } else {
             response.status = 204

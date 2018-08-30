@@ -16,7 +16,6 @@ class Actividad {
     ActividadTraduccion traduccionIngles
 
     static hasMany = [ media:ActividadMedia ]
-
     static embedded = ['traduccionEspanol', 'traduccionIngles']
 
     static constraints = {
@@ -24,11 +23,9 @@ class Actividad {
         longitud nullable:true, blank:true
         lugar size:5..500
         traduccionIngles nullable:true, blank:true
-        traduccionEspanol validator: { val, obj ->
-            if(val.titulo == null) {
-                return 'traduccionEspanol.titulo.null'
-            } else if(val.contenido == null) {
-                return 'traduccionEspanol.contenido.null'
+        traduccionEspanol validator: { val ->
+            if(val.titulo == null || val.contenido == null) {
+                return 'traduccionEspanol.size'
             }
         }
     }
@@ -36,14 +33,17 @@ class Actividad {
     static mapping = {
         sort fechaPublicacion: "desc"
     }
-}
 
-class ActividadTraduccion {
-    String titulo
-    String contenido
+    static class ActividadTraduccion {
+        String titulo
+        String contenido
 
-    static constraints = {
-        titulo size:0..900, nullable:true, blank:true
-        contenido size:10..50000, nullable:true, blank:true
+        static constraints = {
+            titulo size:5..200, nullable:true, blank:true
+            contenido size:50..18000, nullable:true, blank:true
+        }
     }
 }
+
+
+

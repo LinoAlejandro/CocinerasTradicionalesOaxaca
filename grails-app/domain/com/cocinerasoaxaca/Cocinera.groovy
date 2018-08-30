@@ -2,16 +2,16 @@ package com.cocinerasoaxaca
 import grails.databinding.BindingFormat
 
 class Cocinera {
-
     Date fechaRegistro
     String nombres
     String apellidos
+    @BindingFormat("yyyy-MM-dd'T'HH:mm")
     Date fechaNacimiento
 
     String ubicacionFotoPerfil
 
-    String telefonoFijo
-    String telefonoCelular
+    Integer telefonoFijo
+    Integer telefonoCelular
     String correoElectronico
 
     String regionGeografica
@@ -27,65 +27,41 @@ class Cocinera {
     String lenguaMadre
     String dialecto
 
-    Collection platillos
-
-    static hasMany = [platillos:Platillo]
-
-
-}
-
-
-/*[Inscripcion]*
-
-    /*Datos de los ayudantes (Nueva clase)*
-        String nombreCompleto
-        String telefono
-        String genero
-
-    /*Lista de platillos (Nueva clase)*
-        String nombre
-        String tipo
-
-    /*Lista de equipo mayor (Nueva clase)*
-        String tipo
-        String cantidad
-
-/*[Historia de vida]*
-    
     String vestimentaRegional
     String actividadPreponderante
     String descripcionComoAprendioCocinar
     String quienLeEnsenoCocinar
     String aQuienEnsenoCocinar
-    
-    /*Informacion de la receta*
-    String platilloRepresentar
-    String razonPorPlatillo
-    String formaEnQueSePrepara
-    String formaConsumirPlatillo
 
-/*[Receta]*
+    Collection platillos
+    Collection inscripciones
 
-    String nombrePlatilloReceta
-    String tipoPreparacion
-    String origen
-    String rendimiento
-    String consumo
+    static hasMany = [platillos:Platillo, inscripciones:Inscripcion]
 
-    /*Ingredientes*
-        String nombre
-        String cantidad
-
-    String modoPreparacion
-    String historia
-
-/*[Concursos]*
-    Date fecheInscripcion
-    String categoria
-
-    /*Ingredientes*
-        String nombre
-        String cantidad
-
-    String modoDePreparacion
-*/
+    static constraints = {
+        nombres size:5..450
+        apellidos size:5..450
+        fechaNacimiento max:new Date()
+        telefonoFijo validator:{ val
+            return (val.size() > 6 && val.size() < 13)
+        }
+        telefonoCelular validator:{ val
+            return (val.size() >= 10)
+        }
+        correoElectronico email:true
+        regionGeografica size:5..250
+        municipio size:5..250
+        agencia size:5..250
+        calle size:5..250
+        noExt size:5..250
+        noInt size:5..250
+        etnia size:5..350
+        lenguaMadre size:5..350
+        dialecto size:5..350
+        vestimentaRegional size:5..1000
+        actividadPreponderante size:5..1000
+        descripcionComoAprendioCocinar size:5..1000
+        quienLeEnsenoCocinar size:5..1000
+        aQuienEnsenoCocinar size:5..1000
+    }
+}

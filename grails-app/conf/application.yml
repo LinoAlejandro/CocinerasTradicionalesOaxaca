@@ -98,8 +98,10 @@ environments:
         dataSource:
             pooled : true
             dbCreate : create-drop
+            logSql: true
             url : "jdbc:mysql://localhost/cocinera_bd"
-            driverClassName : "com.mysql.jdbc.Driver"
+            driverClassName: com.mysql.jdbc.Driver
+            dialect: org.hibernate.dialect.MySQL5InnoDBDialect
             username : "root"
             password : "admin"
             properties:

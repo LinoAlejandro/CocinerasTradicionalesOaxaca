@@ -47,7 +47,7 @@
                     <g:link class="btn btn-outline-primary btn-sm" action="update" id="${actividad.id}">Modificar</g:link>
                   </td>
                   <td>
-                    <g:link class="btn btn-outline-danger btn-sm" action="delete" id="${actividad.id}">Eliminar</g:link>
+                    <g:link class="btn btn-outline-danger btn-sm" action="delete" id="${actividad.id}" params="${params}">Eliminar</g:link>
                   </td>
                   <td> 
                     <button class="btn btn-outline-success btn-sm" onclick="clicked(this)" data-toggle="modal" data-target="#exampleModal">
@@ -147,7 +147,8 @@
               ubicacion: ubicacion.value,
               tipo: tipo.value,
               datosAutor: datosAutor.value
-          } 
+          }
+          console.log(data)
 
           $.post(url, data, function(data, status ){
               var hidden = document.getElementById('hidden')

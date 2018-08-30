@@ -1,17 +1,17 @@
 package com.cocinerasoaxaca
 import grails.plugin.springsecurity.annotation.Secured
-import java.text.SimpleDateFormat
-import java.text.DateFormat
 import grails.converters.JSON
 
 class ActividadController {
+
+    def sessionFactory
 
     @Secured('ROLE_ADMIN')
     def index() {
         if(!params.max) {
             params.max = 10
         }
-        [actividades: Actividad.findAll(params), actividadCount: Actividad.count()]
+        [actividades: Actividad.findAll(params), actividadCount: Actividad.count(), params:params]
     }
 
     @Secured('ROLE_ADMIN')
@@ -19,16 +19,21 @@ class ActividadController {
         if(request.method == 'POST') {
             actividad.fechaPublicacion = new Date()
             if(actividad.save()) {
+                def sesion = sessionFactory.currentSession
+                def query = "INSERT INTO actividad_media(version, tipo, actividad_id, ubicacion, datos_autor, traduccion_espanol_pie_media, traduccion_ingles_pie_media) VALUES"
                 session.media.each {
+                    query = query + " (0,'" + it.tipo + "', " + actividad.id.toString() + ", '" + it.ubicacion + "', '" + it.datosAutor + "', '" + it.traduccionEspanol.pieMedia + "', '" + it.traduccionIngles.pieMedia +  "'),"
                     it.actividad = actividad
                     it.save()
                 }
+                query = query.substring(0,query.size() - 1) + ";"
+                def sqlQuery = sesion.createSQLQuery(query)
                 session.media = null
                 redirect action:'index'
                 return
             }
         } else {
-            session.media = []
+            session.media = new ArrayList<ActividadMedia>()
         }
 
         [actividad:actividad]
@@ -47,9 +52,12 @@ class ActividadController {
     }
 
     @Secured('ROLE_ADMIN')
-    def delete(Actividad actividad) {
-        actividad.delete(flush:true)
-        redirect action:'index'
+    def delete() {
+        def query = 'DELETE FROM ActividadMedia where actividad.id = ' + Long.parseLong(params.id)
+        def update = ActividadMedia.executeUpdate(query)
+        query = 'DELETE FROM Actividad where id = ' + Long.parseLong(params.id)
+        update = Actividad.executeUpdate(query)
+        redirect action:'index', params:params
     }
 
     @Secured('ROLE_ADMIN')
@@ -70,38 +78,18 @@ class ActividadController {
     }
 
     @Secured('ROLE_ADMIN')
-    def saveMedia() {
-        println params
-        def actividadMedia = new ActividadMedia(params)
+    def saveMedia(ActividadMedia actividadMedia) {
         if(actividadMedia.save()) {
             response.status = 200
             render(contentType: "application/json") {
-                actividad(id: actividadMedia.id,
-                    tipo: actividadMedia.tipo, 
-                    ubicacion: actividadMedia.ubicacion, 
-                    'traduccionEspanol.pieMedia':actividadMedia.traduccionEspanol.pieMedia,
-                    'traduccionIngles.pieMedia':actividadMedia.traduccionEspanol.pieMedia,
-                    datosAutor:actividadMedia.datosAutor)
-            }
-        } else {
-            response.status = 204
-            return [] as JSON
-        }
-    }
-
-    @Secured('ROLE_ADMIN')
-    def updateMedia(ActividadMedia actividadMedia) {
-        actividadMedia.properties = params
-        println params
-        if(actividadMedia.save(flush:true)) {
-            response.status = 200
-            render(contentType: 'application/json') {
-                actividad(id: actividadMedia.id,
+                actividad(
+                    id: actividadMedia.id,
                     tipo: actividadMedia.tipo, 
                     ubicacion: actividadMedia.ubicacion, 
                     'traduccionEspanol.pieMedia': actividadMedia.traduccionEspanol.pieMedia,
-                    'traduccionIngles.pieMedia': actividadMedia.traduccionIngles.pieMedia,
-                    datosAutor:actividadMedia.datosAutor)
+                    'traduccionIngles.pieMedia': actividadMedia.traduccionEspanol.pieMedia,
+                    datosAutor: actividadMedia.datosAutor
+                )
             }
         } else {
             response.status = 204
@@ -110,8 +98,41 @@ class ActividadController {
     }
 
     @Secured('ROLE_ADMIN')
-    def deleteMedia(ActividadMedia actividadMedia) {
-        if(!actividadMedia.delete(flush:true)) {
+    def updateMedia() {
+        def update = ActividadMedia.executeUpdate(
+            'update ActividadMedia set ' +  
+            'tipo=:tipo, ' + 
+            'ubicacion=:ubicacion, ' + 
+            'traduccionEspanol.pieMedia=:pieEspanol, ' + 
+            'traduccionIngles.pieMedia=:pieIngles, ' + 
+            'datosAutor=:datosAutor ' + 
+            'where id=:id', 
+            [tipo: params.tipo,
+             ubicacion: params.ubicacion,
+             pieEspanol: params['traduccionEspanol.pieMedia'],
+             pieIngles: params['traduccionIngles.pieMedia'],
+             datosAutor: params.datosAutor,
+             id: Long.parseLong(params.id)])
+        if(update > 0) {
+            response.status = 200
+            render(contentType: 'application/json') {
+                actividad(id: params.id,
+                    tipo: params.tipo, 
+                    ubicacion: params.ubicacion, 
+                    'traduccionEspanol.pieMedia': params['traduccionEspanol.pieMedia'],
+                    'traduccionIngles.pieMedia': params['traduccionIngles.pieMedia'],
+                    datosAutor: params.datosAutor)
+            }
+        } else {
+            response.status = 204
+            return [] as JSON
+        }
+    }
+
+    @Secured('ROLE_ADMIN')
+    def deleteMedia() {
+        def update = ActividadMedia.executeUpdate('delete from ActividadMedia where id=:id', [id:Long.parseLong(params.id)])
+        if(update > 0) {
             response.status = 200
         } else {
             response.status = 204
