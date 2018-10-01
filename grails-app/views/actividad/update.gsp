@@ -5,17 +5,31 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta name="layout" content="admin"/>
     <meta charset="utf-8" />
-    <title>Actualizar una actividad</title>
+    <title>Actualizar Actividad</title>
     <asset:stylesheet href="richText/richtext.min.css" />
   </head>
   <body>
     <div class="container pt-4">
-      <div class="h2 mb-3 text-center">
-        Actualizar una actividad
+      <div class="row">
+        <div class="col-md-12 display-3 text-center lobster">
+          Actualizar Actividad
+          <i class="far fa-calendar-alt text-purple"></i>
+        </div>
       </div>
+      <g:if test="${flash.message}">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-danger">
+              ${flash.message}
+            </div>
+          </div>
+        </div>
+      </g:if>
       <g:form name="formcreate" action="update">
         <input type="hidden" name="id" value="${actividad.id}">
-        <div class="row justify-content-center pt-2">
+        <input type="hidden" name="max" value="${params.max}">
+        <input type="hidden" name="offset" value="${params.offset}">
+        <div class="row justify-content-center pt-2 cabin">
           <div class="col-md-12">
             <div class="form-group">
               <label for="titulo">Título</label>
@@ -37,8 +51,7 @@
                 ${raw(actividad.traduccionEspanol?.contenido)}
               </textarea>
             </div>
-            <hr class="my-3 bg-dark">
-            <div class="h4">
+            <div class="h1 col-md-12 lobster text-center">
               Datos de la traduccion <strong>[Inglés]</strong>
             </div>
             <div class="form-group">
@@ -51,8 +64,7 @@
                 ${raw(actividad?.traduccionIngles?.contenido)}
               </textarea>
             </div>
-            <hr class="my-3 bg-dark">
-            <div class="h4">
+            <div class="h1 col-md-12 lobster text-center">
               Datos de la ubicación
             </div>
             <div class="form-group">
@@ -65,16 +77,16 @@
               <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="font-size:18px">
               <div id="map" class="w-100" style="height:400px"></div>
             </div>
-            <div class="h4">
-              Media
+            <div class="h1 col-md-12 lobster text-center">
+              Tabla de Media <i class="far fa-images text-purple"></i>
             </div>
-            <div>
-              <table class="table">
+            <div class="col-md-12">
+              <table class="table table-striped">
                 <thead>
-                  <tr>
-                    <td>Pie</td>
-                    <td>Ubicación</td>
-                    <td>Tipo</td>
+                  <tr class="lobster h4">
+                    <td scope="col">Pie</td>
+                    <td scope="col">Ubicación</td>
+                    <td scope="col">Tipo</td>
                     <td></td>
                     <td></td>
                   </tr>
@@ -100,7 +112,7 @@
             </div>
             <div class="form-group">
               <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#saveMediaModal">Agregar media</button>
-              <input type="submit" name="" value="Actualizar" class="btn btn-primary btn-md">
+              <input type="submit" name="" value="Actualizar" class="btn bg-purple text-light btn-md">
             </div>
           </div>
         </div>
@@ -126,40 +138,53 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Crear elemento de media</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-title" >
+              <div class="d-flex justify-content-between">
+                <div class="h1 lobster"  id="agregarMediaModialLabel">
+                  Agregue media a su noticia
+                  <i class="far fa-images text-purple"></i>
+                </div>
+                <div>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">
+                      &times;
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="modal-body">
             <div id="hidden"></div>
-            <div class="form-group">
-              <label for="">Pie de media [Español] </label>
-              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
-            </div>
-            <div class="form-group">
-              <label for="">Pie de media [Inglés] </label>
-              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
-            </div>
-            <div class="form-group">
-              <label for="">Ubicación</label>
-              <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
-            </div>
-            <div class="form-group">
-              <label for="">Tipo</label>
-              <select name="tipo" id="tipo" class="form-control">
-                <option value="imagen">Imágen</option>
-                <option value="video">Video</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="">Autor</label>
-              <input type="text" class="form-control" id="datosAutor">
+            <div class="row cabin">
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Español] </label>
+                <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Inglés] </label>
+                <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Ubicación</label>
+                <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Tipo</label>
+                <select name="tipo" id="tipo" class="form-control">
+                  <option value="imagen">Imágen</option>
+                  <option value="video">Video</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Autor</label>
+                <input type="text" class="form-control" id="datosAutor">
+              </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="saveMedia()">Crear</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn bg-purple text-light" onclick="saveMedia()">Crear</button>
           </div>
         </div>
       </div>
@@ -169,42 +194,55 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Actualizar Media</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-title" >
+              <div class="d-flex justify-content-between">
+                <div class="h1 lobster"  id="agregarMediaModialLabel">
+                  Agregue media a su noticia
+                  <i class="far fa-images text-purple"></i>
+                </div>
+                <div>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">
+                      &times;
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="modal-body">
             <div id="hiddenUpdate"></div>
             <input type="hidden" id="idActividadMedia" />
             <div id="hidden"></div>
-            <div class="form-group">
-              <label for="">Pie de media [Español] </label>
-              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanolUpdate"/>
-            </div>
-            <div class="form-group">
-              <label for="">Pie de media [Inglés] </label>
-              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaInglesUpdate"/>
-            </div>
-            <div class="form-group">
-              <label for="">Ubicación</label>
-              <input type="text" class="form-control" name="ubicación" id="ubicacionUpdate"/>
-            </div>
-            <div class="form-group">
-              <label for="">Tipo</label>
-              <select name="tipo" id="tipoUpdate" class="form-control" >
-                <option value="imagen">Imágen</option>
-                <option value="video">Video</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="">Autor</label>
-              <input type="text" class="form-control" id="datosAutorUpdate">
+            <div class="row cabin">
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Español] </label>
+                <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanolUpdate"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Inglés] </label>
+                <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaInglesUpdate"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Ubicación</label>
+                <input type="text" class="form-control" name="ubicación" id="ubicacionUpdate"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Tipo</label>
+                <select name="tipo" id="tipoUpdate" class="form-control" >
+                  <option value="imagen">Imágen</option>
+                  <option value="video">Video</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Autor</label>
+                <input type="text" class="form-control" id="datosAutorUpdate">
+              </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="updateMedia()">Actualizar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn bg-purple text-light" onclick="updateMedia()">Actualizar</button>
           </div>
         </div>
       </div>
@@ -221,13 +259,14 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCjGKKCJZYfvAWDd-35EupFSIWDJjB5zk&libraries=places"></script>
 
      <script type="text/javascript">
-        var position = {lat: ${actividad.latitud ?: 17.0669}, lng: ${actividad?.longitud ?: -96.7203} }
+        var position = {lat: ${actividad?.latitud ?: 17.0669}, lng: ${actividad?.longitud ?: -96.7203}} 
+
         var marker = new google.maps.Marker({
             position: position
         });
 
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: position,
+            center: position, 
             zoom: 13
         });
 
@@ -237,38 +276,13 @@
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-            searchBox.setBounds(map.getBounds());
-        });
-
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
         searchBox.addListener('places_changed', function() {
             var places = searchBox.getPlaces();
-
-            if (places.length == 0) {
-                return;
-            }
 
             // For each place, get the icon, name and location.
             var bounds = new google.maps.LatLngBounds();
             places.forEach(function(place) {
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                var icon = {
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(25, 25)
-                };
-
                 if (place.geometry.viewport) {
-                  // Only geocodes have viewport.
                    bounds.union(place.geometry.viewport);
                 } else {
                     bounds.extend(place.geometry.location);
@@ -279,7 +293,7 @@
 
         google.maps.event.addListener(map, 'click', function(e) {        
             marker.setPosition({lat:e.latLng.lat(), lng:e.latLng.lng()}) 
-        });      
+        });  
 
         var formcreate = document.getElementById('formcreate')
 

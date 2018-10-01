@@ -3,18 +3,27 @@
   <head>
     <meta name="layout" content="admin"/>
     <meta charset="utf-8" />
-    <title></title>
-    <asset:stylesheet href="froala/froala_editor.pkgd.min.css" />
-    <asset:stylesheet href="froala/froala_style.min.css" />
-    
+    <title>Crear Administrador</title>
   </head>
   <body>
     <div class="container pt-4">
-      <div class="h2 mb-3 text-center">
-        Crear nuevo administrador
+      <div class="row">
+        <div class="col-md-12 display-3 text-center lobster">
+          Crear Administrador
+          <i class="fas fa-user text-purple"></i>
+        </div>
       </div>
+      <g:if test="${flash.message}">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-danger">
+              ${flash.message}
+            </div>
+          </div>
+        </div>
+      </g:if>
       <g:form name="name" action="create">
-        <div class="row justify-content-center pt-2">
+        <div class="col-md-12 cabin row justify-content-center pt-2">
           <div class="col-md-6">
             <div class="form-group">
               <label for="nombre">Nombre</label>
@@ -42,10 +51,10 @@
               <label for="passwordVerification">Verifique su contraseña</label>
               <input type="password" name="passwordVerification" value="" class="form-control">
             </div>
-            <div class="form-group">
-              <input type="submit" name="" value="Crear Nuevo" class="btn btn-primary btn-md">
-            </div>
           </div>
+        </div>
+        <div class="col-md-6 form-group ">
+          <button class="btn bg-purple text-light">Crear</button>
         </div>
       </g:form>
     </div>

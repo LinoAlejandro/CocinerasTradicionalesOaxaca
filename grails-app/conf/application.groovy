@@ -25,8 +25,10 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/favicon.ico', filters: 'none'],
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [ [pattern: '/monitoring', access: ['ROLE_ADMIN']] ]
 
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [ [pattern: '/monitoring', access: ['ROLE_ADMIN']] ]
+grails.plugin.springsecurity.ui.register.postRegisterUrl = '/general/index'
+grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/general/index'
 
 environments {
     production {

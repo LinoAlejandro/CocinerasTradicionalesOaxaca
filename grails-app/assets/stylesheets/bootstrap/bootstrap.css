@@ -5390,7 +5390,7 @@ button.close {
 
 .modal-header {
   display: -ms-flexbox;
-  display: flex;
+  display: block;
   -ms-flex-align: start;
   align-items: flex-start;
   -ms-flex-pack: justify;
@@ -5461,6 +5461,15 @@ button.close {
 @media (min-width: 992px) {
   .modal-lg {
     max-width: 800px;
+  }
+  .modal-xl {
+    max-width: 900px;
+  }
+}
+
+@media (min-width: 1150px) {
+  .modal-xl {
+    max-width:1100px;
   }
 }
 

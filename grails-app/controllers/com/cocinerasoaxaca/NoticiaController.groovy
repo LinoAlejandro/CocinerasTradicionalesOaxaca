@@ -9,14 +9,16 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def index() {
+        println '\n\nIn index action controller noticia'
         if(!params.max) {
             params.max = 10
         }
-        [noticias: Noticia.findAll(params), noticiaCount: Noticia.count(), params:params]
+        [noticias: Noticia.findAll(params), noticiaCount: Noticia.count(), params:[max:params.max, offset:params.offset]]
     }
 
     @Secured('ROLE_ADMIN')
     def create(Noticia noticia) {
+        println '\n\nIn create action controller noticia'
         if(request.method == 'POST') {
             noticia.fechaPublicacion = new Date()
             if(noticia.save()) {
@@ -42,20 +44,20 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def update(Noticia noticia) {
+        println '\n\nIn update action controller noticia'
         if(request.method == 'POST') {
             noticia.properties = params
             if(noticia.save(flush:true)) {
-                redirect action:'index'
+                redirect action:'index', params:[max:params.max, offset:params.offset]
                 return
             }
         }
-        if(noticia) {
-            [noticia:noticia, medias: NoticiaMedia.findAll { eq('noticia', noticia)} ]
-        }
+        [noticia:noticia, medias: NoticiaMedia.findAll { eq('noticia', noticia)}, params:[max:params.max, offset:params.offset]]
     }
 
     @Secured('ROLE_ADMIN')
     def delete() {
+        println '\n\nIn delete action controller noticia'
         def query = 'DELETE FROM NoticiaMedia where noticia.id = ' + Long.parseLong(params.id)
         def update = NoticiaMedia.executeUpdate(query)
         query = 'DELETE FROM Noticia where id = ' + Long.parseLong(params.id)
@@ -65,6 +67,7 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def addMedia() {
+        println '\n\nIn addMedia action controller noticia'
         def noticiaMedia = new NoticiaMedia(params)
         if(noticiaMedia.validate()) {
             session.mediaNoticia.add(noticiaMedia)
@@ -82,6 +85,7 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def saveMedia(NoticiaMedia noticiaMedia) {
+        println '\n\nIn saveMedia action controller noticia'
         if(noticiaMedia.save()) {
             response.status = 200
             render(contentType: "application/json") {
@@ -100,6 +104,7 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def updateMedia(NoticiaMedia media) {
+        println '\n\nIn update action controller noticia'
         def update = NoticiaMedia.executeUpdate(
             'update NoticiaMedia set ' +  
             'tipo=:tipo, ' + 
@@ -132,6 +137,7 @@ class NoticiaController {
 
     @Secured('ROLE_ADMIN')
     def deleteMedia() {
+        println '\n\nIn deleteMedia action controller noticia'
         def update = NoticiaMedia.executeUpdate('delete from NoticiaMedia where id=:id', [id:Long.parseLong(params.id)])
         if(update > 0) {
             response.status = 200
@@ -142,6 +148,7 @@ class NoticiaController {
 
     @Secured('permitAll')
     def listarticulos() {
+        println '\n\nIn listarticulos action controller noticia'
         if(!params.max) {
             params.max = 6
         }
@@ -232,6 +239,7 @@ class NoticiaController {
 
     @Secured('permitAll')
     def listanoticias() {
+        println '\n\nIn listanoticias action controller noticia'
         if(!params.max) {
             params.max = 6
         }
@@ -323,7 +331,7 @@ class NoticiaController {
 
     @Secured('permitAll')
     def show(Noticia noticia) {
-
+        println '\n\nIn show action controller noticia'
         def sugerencias = Noticia.executeQuery(
           "from Noticia n where " +
               "n.id != :idNoticia " +

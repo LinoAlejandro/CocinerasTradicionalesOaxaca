@@ -10,5 +10,6 @@ class Concurso {
 
 	static constraints = {
 		descripcion size:5..250
+		convocatoria nullable:true, blank:true
 	}
 }

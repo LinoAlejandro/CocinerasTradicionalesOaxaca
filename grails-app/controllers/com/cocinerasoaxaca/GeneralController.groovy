@@ -15,12 +15,10 @@ class GeneralController {
             return
         }
 
-        cleanData()
-
         if(params.language) {
             session.language = params.language
         }
-
+/*
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT-5:00"));
         Date currentDate = calendar.getTime();
         Calendar cal = Calendar.getInstance();
@@ -49,7 +47,10 @@ class GeneralController {
           println it.fechaPublicacion
           println '\n\n'
         }
-
+*/
+        def actividadesMap = []
+        def noticiasMap = []
+        def cocineras = []
         [actividades:actividadesMap, noticias:noticiasMap, cocineras:cocineras]
     }
 

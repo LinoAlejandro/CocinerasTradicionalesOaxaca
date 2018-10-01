@@ -20,7 +20,7 @@ class Platillo {
 
     static constraints = {
         nombre size:5..300
-        tipoPlatillo inList:['cotidiano', 'ceremonial']
+        tipoPlatillo inList:['Cotidiano', 'Ceremonial']
         historia size:5..550
         razonPorPlatillo size:5..550
         modoPreparacion size:5..550

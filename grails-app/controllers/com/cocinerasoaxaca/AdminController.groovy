@@ -5,18 +5,7 @@ import grails.plugin.springsecurity.annotation.Secured
 class AdminController {
 
     def index() {
-        Cocinera.withSession {
-            it.flush()
-            it.clear()
-        }
-        Noticia.withSession {
-            it.flush()
-            it.clear()
-        }
-        Actividad.withSession {
-            it.flush()
-            it.clear()
-        }
+        println '\n\nIn index action admin controller'
         [admins: Admin.findAll()]
     }
 
@@ -24,7 +13,9 @@ class AdminController {
         if(request.method == 'POST') {
             def user = new User(username:params.username, password:params.password)
             admin.user = user
-            if(admin.save(flush:true)) {
+            if(params.password != params.passwordVerification) {
+                flash.message = 'Las contraseñas no coinciden'                
+            } else if(admin.save(flush:true)) {
                 user.save(flush:true)
                 def role = Role.findByAuthority('ROLE_ADMIN')
                 UserRole.create user, role
@@ -36,13 +27,16 @@ class AdminController {
                 return
             }
         }
+        
         [admin:admin]
     }
 
     def update(Admin admin) {
         if(request.method == 'POST') {
             admin.properties = params
-            if(admin.save(flush:true)) {
+            if(params.password != params.passwordVerification) {
+                flash.message = 'Las contraseñas no coinciden'                
+            } else if(admin.save(flush:true)) {
                 def user = admin.user
                 user.username = params.username
                 user.password = params.password

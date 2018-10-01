@@ -3,15 +3,27 @@
   <head>
     <meta name="layout" content="admin"/>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Modificar Administrador</title>
   </head>
   <body>
     <div class="container pt-4">
-      <div class="h2 mb-3 text-center">
-        Modificar administrador
+      <div class="row">
+        <div class="col-md-12 display-3 text-center lobster">
+          Modificar Administrador
+          <i class="fas fa-user text-purple"></i>
+        </div>
       </div>
+      <g:if test="${flash.message}">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-danger">
+              ${flash.message}
+            </div>
+          </div>
+        </div>
+      </g:if>
       <g:form name="name" action="update">
-        <div class="row justify-content-center pt-2">
+        <div class="col-md-12 cabin row justify-content-center pt-2">
           <input type="hidden" name="id" value="${this.admin?.id}" />
           <div class="col-md-6">
             <div class="form-group">
@@ -34,16 +46,16 @@
             </div>
             <div class="form-group">
               <label for="password">Contraseña</label>
-              <input type="password" id="password" name="password" value="${this.admin?.password}" class="form-control" />
+              <input type="password" id="password" name="password" value="" class="form-control" />
             </div>
             <div class="form-group">
               <label for="passwordVerification">Verificar contraseña</label>
-              <input type="password" name="passwordVerification" value="${this.admin?.passwordVerification}" class="form-control" />
-            </div>
-            <div class="form-group">
-              <input type="submit" name="" value="Modificar" class="btn btn-primary btn-md" />
+              <input type="password" name="passwordVerification" value="" class="form-control" />
             </div>
           </div>
+        </div>
+        <div class="col-md-6 form-group ">
+          <button class="btn bg-purple text-light">Modificar</button>
         </div>
       </g:form>
     </div>

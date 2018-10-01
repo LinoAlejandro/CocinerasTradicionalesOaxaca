@@ -5,75 +5,76 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta name="layout" content="admin"/>
     <meta charset="utf-8" />
-    <title>Crear actividad</title>
+    <title>Crear Actividad</title> 
     <asset:stylesheet href="richText/richtext.min.css" />
   </head>
   <body>
     <div class="container pt-4">
-      <div class="h2 mb-3 text-center">
-        Crear nueva Actividad
+      <div class="row">
+        <div class="col-md-12 display-3 text-center lobster">
+          Crear Actividad
+          <i class="far fa-calendar-alt text-purple"></i>
+        </div>
       </div>
       <g:form name="formcreate" action="create">
-        <div class="row justify-content-center pt-2">
-          <div class="col-md-12">
-            <div class="form-group">
+        <div class="row justify-content-center pt-2 cabin">
+          <div class="col-md-12 row">
+            <div class="form-group col-md-12">
               <label for="titulo">Título</label>
               <input type="text" name="traduccionEspanol.titulo" value="${actividad?.traduccionEspanol?.titulo}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
               <label for="fechaInicio">Fecha de inicio</label>
               <input id="fechaInicio" type="datetime-local" name="fechaInicio"
               value="${actividad?.fechaInicio ? actividad?.fechaInicio.format(format) : new Date().format(format)}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
               <label for="fechaFinal">Fecha final</label>
               <input id="fechaFinal" type="datetime-local" name="fechaFinal" 
               value="${actividad?.fechaFinal ? actividad?.fechaFinal.format(format) : new Date().format(format)}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="contenido">Descripción</label>
               <textarea class="contentEspanol" name="traduccionEspanol.contenido" class="form-control">
                 ${raw(actividad?.traduccionEspanol?.contenido)}
               </textarea>
             </div>
-            <hr class="my-3 bg-dark">
-            <div class="h4">
+            <div class="h1 col-md-12 lobster text-center">
               Datos de la traduccion <strong>[Inglés]</strong>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="titulo">Título</label>
               <input type="text" name="traduccionIngles.titulo" value="${actividad?.traduccionIngles?.titulo}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="contenido">Descripción</label>
               <textarea class="contentIngles" name="traduccionIngles.contenido" class="form-control">
                 ${raw(actividad?.traduccionIngles?.contenido)}
               </textarea>
             </div>
-            <hr class="my-3 bg-dark">
-            <div class="h4">
+            <div class="h1 col-md-12 lobster text-center">
               Datos de la ubicación
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="lugar">Nombre de la ubicación</label>
               <input type="text" name="lugar" value="${actividad?.lugar}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <input id="lat" name="latitud" type="hidden" />
               <input id="lon" name="longitud" type="hidden" />
               <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="font-size:18px">
               <div id="map" class="w-100" style="height:400px"></div>
             </div>
-            <div class="h4">
-              Media
+            <div class="h1 col-md-12 lobster text-center">
+              Tabla de Media <i class="far fa-images text-purple"></i>
             </div>
-            <div>
-              <table class="table">
+            <div class="col-md-12">
+              <table class="table table-striped">
                 <thead>
-                  <tr>
-                    <td>Pie</td>
-                    <td>Ubicación</td>
-                    <td>Tipo</td>
+                  <tr class="lobster h4">
+                    <td scope="col">Pie</td>
+                    <td scope="col">Ubicación</td>
+                    <td scope="col">Tipo</td>
                   </tr>
                 </thead>
                 <tbody id="mediaTable">
@@ -87,11 +88,11 @@
                 </tbody>
               </table>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
                 Agregar media
               </button>
-              <input type="submit" name="" value="Crear" class="btn btn-primary btn-md">
+              <input type="submit" name="" value="Crear" class="btn bg-purple text-light btn-md">
             </div>
           </div>
         </div>
@@ -101,40 +102,53 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Crear elemento de media</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-title" >
+              <div class="d-flex justify-content-between">
+                <div class="h1 lobster"  id="agregarMediaModialLabel">
+                  Agregue media a su noticia
+                  <i class="far fa-images text-purple"></i>
+                </div>
+                <div>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">
+                      &times;
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="modal-body">
             <div id="hidden"></div>
-            <div class="form-group">
-              <label for="">Pie de media [Español] </label>
-              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
-            </div>
-            <div class="form-group">
-              <label for="">Pie de media [Inglés] </label>
-              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
-            </div>
-            <div class="form-group">
-              <label for="">Ubicación</label>
-              <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
-            </div>
-            <div class="form-group">
-              <label for="">Tipo</label>
-              <select name="tipo" id="tipo" class="form-control">
-                <option value="imagen">Imágen</option>
-                <option value="video">Video</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="">Autor</label>
-              <input type="text" class="form-control" name="datosAutor" id="datosAutor"/>
+            <div class="row cabin">
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Español] </label>
+                <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Inglés] </label>
+                <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Ubicación</label>
+                <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Tipo</label>
+                <select name="tipo" id="tipo" class="form-control">
+                  <option value="imagen">Imágen</option>
+                  <option value="video">Video</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Autor</label>
+                <input type="text" class="form-control" name="datosAutor" id="datosAutor"/>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="addMedia()">Crear</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn bg-purple text-light" onclick="addMedia()">Crear</button>
           </div>
         </div>
       </div>
@@ -219,7 +233,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCjGKKCJZYfvAWDd-35EupFSIWDJjB5zk&libraries=places"></script>
 
      <script type="text/javascript">
-        var position = {lat: ${actividad?.latitud ?: 17.0669}, lng: ${actividad?.longitud ?: -96.7203} }
+        var position = {lat: ${actividad?.latitud ?: 17.0669}, lng: ${actividad?.longitud ?: -96.7203}} 
 
         var marker = new google.maps.Marker({
             position: position
@@ -236,38 +250,13 @@
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-            searchBox.setBounds(map.getBounds());
-        });
-
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
         searchBox.addListener('places_changed', function() {
             var places = searchBox.getPlaces();
-
-            if (places.length == 0) {
-                return;
-            }
 
             // For each place, get the icon, name and location.
             var bounds = new google.maps.LatLngBounds();
             places.forEach(function(place) {
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                var icon = {
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(25, 25)
-                };
-
                 if (place.geometry.viewport) {
-                  // Only geocodes have viewport.
                    bounds.union(place.geometry.viewport);
                 } else {
                     bounds.extend(place.geometry.location);
@@ -278,7 +267,7 @@
 
         google.maps.event.addListener(map, 'click', function(e) {        
             marker.setPosition({lat:e.latLng.lat(), lng:e.latLng.lng()}) 
-        });      
+        });  
 
         var formcreate = document.getElementById('formcreate')
 

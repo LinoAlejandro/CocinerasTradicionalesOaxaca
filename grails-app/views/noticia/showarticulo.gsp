@@ -1,6 +1,6 @@
+<!DOCTYPE html>
 <%@ import="java.text.SimpleDateFormat" %>
 <g:set var="url" value="${request.getScheme() + '://' + request.getServerName() + request.getForwardURI()}"/>
-<!DOCTYPE html>
 <html>
   <head>
     <g:if test="${session.language}">
@@ -12,7 +12,6 @@
       <title>${noticia.traduccionEspanol.titulo}</title>
     </g:else>
     <meta charset="utf-8" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <asset:stylesheet href="custom/noticia/showArticulo.css"/>
 
     <meta name="twitter:card" content="summary_large_image">

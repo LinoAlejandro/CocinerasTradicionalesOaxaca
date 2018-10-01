@@ -10,90 +10,106 @@
   </head>
   <body>
     <div class="container pt-4">
-      <div class="h2 mb-3 text-center">
-        Actualizar Noticia
+      <div class="row">
+        <div class="col-md-12 display-3 text-center lobster">
+          Actualizar Noticia
+          <i class="far fa-newspaper text-purple"></i>
+        </div>
       </div>
       <g:form name="formcreate" action="update">
-        <input type="hidden" name="id" value="${noticia.id}">
-        <div class="row justify-content-center pt-2">
-          <div class="col-md-12">
-            <div class="form-group">
+        <input type="hidden" name="max" value="${params.max}" />
+        <input type="hidden" name="offset" value="${params.offset}" />
+        <input type="hidden" name="id" value="${noticia.id}" />
+        <div class="row justify-content-center pt-2 cabin">
+          <div class="col-md-12 row">
+            <div class="form-group col-md-12">
               <label for="titulo">Título</label>
               <input type="text" name="traduccionEspanol.titulo" value="${noticia?.traduccionEspanol?.titulo}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="traduccionEspanol.subtitulo">Subtítulo</label>
               <textarea name="traduccionEspanol.subtitulo" class="form-control">${noticia?.traduccionEspanol?.subtitulo}</textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="contenido">Descripción</label>
               <textarea class="contentEspanol" name="traduccionEspanol.contenido" class="form-control">
                 ${raw(noticia?.traduccionEspanol?.contenido)}
               </textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
               <label for="">Tipo</label>
-              <select name="tipo" id="" class="form-control">
+              <select name="tipo" id="tipoNoticia" class="form-control">
                 <option value="Artículo">Artículo</option>
                 <option value="Boletín">Boletín</option>
                 <option value="Noticia">Noticia</option>
               </select>
+              <script type="text/javascript">
+                  $(document).ready(function() {
+                      var tipoNoticia = document.getElementById('tipoNoticia')
+                      var tipoTexto = "${noticia.tipo}"
+                      if(tipoTexto == "Artículo") {
+                          tipoNoticia.selectedIndex = 0
+                      } else if(tipoTexto == "Boletín") {
+                          tipoNoticia.selectedIndex = 1
+                      } else {
+                          tipoNoticia.selectedIndex = 2
+                      }
+                  })
+                </script>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
               <label for="">Imágen de Portada</label>
-              <input type="text" name="ubicacionImagen" class="form-control"/>
+              <input type="text" name="ubicacionImagen" class="form-control" value="${noticia.ubicacionImagen}"/>
             </div>
             <hr class="my-3 bg-dark">
-            <div class="h4">
+            <div class="h1 col-md-12 lobster text-center">
               Datos de la traduccion <strong>[Inglés]</strong>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="titulo">Título</label>
               <input type="text" name="traduccionIngles.titulo" value="${noticia?.traduccionIngles?.titulo}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="raduccionIngles.subtitulo">Subtítulo</label>
               <textarea name="traduccionIngles.subtitulo" class="form-control">${noticia?.traduccionIngles?.subtitulo}</textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="contenido">Descripción</label>
               <textarea class="contentIngles" name="traduccionIngles.contenido" class="form-control">
                 ${raw(noticia?.traduccionIngles?.contenido)}
               </textarea>
             </div>
             <hr class="my-3 bg-dark">
-            <div class="h4">
+            <div class="h1 col-md-12 lobster text-center">
               Datos de la ubicación
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label for="lugar">Nombre de la ubicación</label>
               <input type="text" name="lugar" value="${noticia?.lugar}" class="form-control" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <input id="lat" name="latitud" type="hidden" />
               <input id="lon" name="longitud" type="hidden" />
               <input id="pac-input" class="controls" type="text" placeholder="Search Box" style="font-size:18px">
               <div id="map" class="w-100" style="height:400px"></div>
             </div>
-            <div class="h4">
-              Media
+            <div class="h1 col-md-12 lobster text-center">
+              Tabla de Media <i class="far fa-images text-purple"></i>
             </div>
-            <div>
-              <table class="table">
+            <div class="col-md-12">
+              <table class="table table-striped">
                 <thead>
-                  <tr>
-                    <td>Pie</td>
-                    <td>Ubicación</td>
-                    <td>Tipo</td>
-                    <td></td>
-                    <td></td>
+                  <tr class="lobster h4">
+                    <td scope="col">Pie</td>
+                    <td scope="col">Ubicación</td>
+                    <td scope="col">Tipo</td>
                   </tr>
                 </thead>
                 <tbody id="mediaTable">
                   <g:each var="media" in="${medias}">
                     <tr id="${media.id}">
                       <td>${media.traduccionEspanol.pieMedia}</td>
-                      <input type="hidden" value="${media.traduccionIngles.pieMedia}">
+                      <input type="hidden" value="${media.traduccionIngles?.pieMedia}">
                       <td>${media.ubicacion}</td>
                       <td>${media.tipo}</td>
                       <input type="hidden" value="${media.datosAutor}">
@@ -108,11 +124,11 @@
                 </tbody>
               </table>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#saveModal">
                 Agregar media
               </button>
-              <input type="submit" name="" value="Actualizar" class="btn btn-primary btn-md">
+              <input type="submit" name="" value="Actualizar" class="btn bg-purple text-light btn-md">
             </div>
           </div>
         </div>
@@ -123,40 +139,53 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Crear elemento de media</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-title" >
+              <div class="d-flex justify-content-between">
+                <div class="h1 lobster"  id="exampleModalLabel">
+                  Agregue media a su noticia
+                  <i class="far fa-images text-purple"></i>
+                </div>
+                <div>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">
+                      &times;
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="modal-body">
             <div id="hidden"></div>
-            <div class="form-group">
-              <label for="">Pie de media [Español] </label>
-              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
-            </div>
-            <div class="form-group">
-              <label for="">Pie de media [Inglés] </label>
-              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
-            </div>
-            <div class="form-group">
-              <label for="">Ubicación</label>
-              <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
-            </div>
-            <div class="form-group">
-              <label for="">Tipo</label>
-              <select name="tipo" id="tipo" class="form-control">
-                <option value="imagen">Imágen</option>
-                <option value="video">Video</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="">Autor</label>
-              <input type="text" class="form-control" id="datosAutor">
+            <div class="row cabin">
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Español] </label>
+                <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanol"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Inglés] </label>
+                <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaIngles"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Ubicación</label>
+                <input type="text" class="form-control" name="ubicación" id="ubicacion"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Tipo</label>
+                <select name="tipo" id="tipo" class="form-control">
+                  <option value="imagen">Imágen</option>
+                  <option value="video">Video</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Autor</label>
+                <input type="text" class="form-control" id="datosAutor">
+              </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="saveMedia()">Crear</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn bg-purple text-light" onclick="saveMedia()">Crear</button>
           </div>
         </div>
       </div>
@@ -166,49 +195,60 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Actualizar Media</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-title" >
+              <div class="d-flex justify-content-between">
+                <div class="h1 lobster"  id="exampleModalLabel">
+                  Actualozar media
+                  <i class="far fa-images text-purple"></i>
+                </div>
+                <div>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">
+                      &times;
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="modal-body">
             <div id="hiddenUpdate"></div>
             <input type="hidden" id="idNoticiaMedia" />
-            <div class="form-group">
-              <label for="">Pie de media [Español] </label>
-              <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanolUpdate"/>
-            </div>
-            <div class="form-group">
-              <label for="">Pie de media [Inglés] </label>
-              <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaInglesUpdate"/>
-            </div>
-            <div class="form-group">
-              <label for="">Ubicación</label>
-              <input type="text" class="form-control" name="ubicación" id="ubicacionUpdate"/>
-            </div>
-            <div class="form-group">
-              <label for="">Tipo</label>
-              <select name="tipo" id="tipoUpdate" class="form-control" >
-                <option value="imagen">Imágen</option>
-                <option value="video">Video</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="">Autor</label>
-              <input type="text" class="form-control" id="datosAutorUpdate">
+            <div class="row cabin">
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Español] </label>
+                <input type="text" class="form-control" name="traduccionEspanol.pieMedia" id="pieMediaEspanolUpdate"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Pie de media [Inglés] </label>
+                <input type="text" class="form-control" name="traduccionIngles.pieMedia" id="pieMediaInglesUpdate"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Ubicación</label>
+                <input type="text" class="form-control" name="ubicación" id="ubicacionUpdate"/>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Tipo</label>
+                <select name="tipo" id="tipoUpdate" class="form-control" >
+                  <option value="imagen">Imágen</option>
+                  <option value="video">Video</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="">Autor</label>
+                <input type="text" class="form-control" id="datosAutorUpdate">
+              </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="updateMedia()">Actualizar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn bg-purple text-light" onclick="updateMedia()">Actualizar</button>
           </div>
         </div>
       </div>
     </div>
 
-
     <script type="text/javascript">
-
       var pieMediaEspanol = document.getElementById('pieMediaEspanol')
       var pieMediaIngles = document.getElementById('pieMediaIngles')
       var ubicacion = document.getElementById('ubicacion')
@@ -396,16 +436,11 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCjGKKCJZYfvAWDd-35EupFSIWDJjB5zk&libraries=places"></script>
 
      <script type="text/javascript">
-        var position = {lat: ${noticia?.latitud ?: 17.0669}, lng: ${noticia?.longitud ?: -96.7203} }
-        var marker = null
+        var position = {lat: ${noticia?.latitud ?: 17.0669}, lng: ${noticia?.longitud ?: -96.7203}} 
 
-        if(isNaN(${noticia?.latitud} )) {
-            var marker = new google.maps.Marker({});
-        } else {
-            var marker = new google.maps.Marker({position:position});
-        }
-
-        
+        var marker = new google.maps.Marker({
+            position: position
+        });
 
         var map = new google.maps.Map(document.getElementById('map'), {
             center: position, 
@@ -418,38 +453,13 @@
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-            searchBox.setBounds(map.getBounds());
-        });
-
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
         searchBox.addListener('places_changed', function() {
             var places = searchBox.getPlaces();
-
-            if (places.length == 0) {
-                return;
-            }
 
             // For each place, get the icon, name and location.
             var bounds = new google.maps.LatLngBounds();
             places.forEach(function(place) {
-                if (!place.geometry) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-                var icon = {
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(25, 25)
-                };
-
                 if (place.geometry.viewport) {
-                  // Only geocodes have viewport.
                    bounds.union(place.geometry.viewport);
                 } else {
                     bounds.extend(place.geometry.location);

@@ -12,17 +12,19 @@
   <asset:javascript src="bootstrap/pooper.min.js" />
   <asset:javascript src="bootstrap/bootstrap.min.js" />
   <asset:stylesheet  src="bootstrap/bootstrap.css" rel="stylesheet" media="screen" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <asset:stylesheet  src="custom/layout/user.css" rel="stylesheet" media="screen" />
   <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
   <g:layoutHead />
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark custom-nav px-5">
     <div class="navbar-brand">
       <span>
-        <a style="color:white; text-decoration:none; font-size:25px" href="${request.getContextPath()}/" class="align-middle">
+        <a style="text-decoration:none; font-size:25px" href="${request.getContextPath()}/" class="text-light align-middle">
           <asset:image src="logoicon.png" width="80" height="40" class="align-middle"/>
           <span class="align-middle lobster" id="navbarBrand">Cocineras de Oaxaca</span>
         </a>
@@ -32,36 +34,36 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ml-auto cabin">
         <li class="nav-item mr-3 rounded custom-navbar-item-purp" >
           <a class="nav-link" href="${request.getContextPath()}/noticia/listarticulos">
-            <span class="cabin">
+            <span class="">
               Artículos
             </span>
           </a>
         </li>
         <li class="nav-item mr-3 custom-navbar-item-green" >
           <a class="nav-link" href="${request.getContextPath()}/noticia/listanoticias">
-            <span class="cabin">
+            <span class="">
               Noticias
             </span>
           </a>
         </li>
         <li class="nav-item mr-3 custom-navbar-item-purp">
           <a class="nav-link" href="/actividad/list">
-            <span class="cabin">
+            <span class="">
               Eventos
             </span>
           </a>
         </li>
         <li class="nav-item mr-3 custom-navbar-item-green ">
           <a class="nav-link" href="/cocinera/list">
-            <span class="cabin">
+            <span class="">
               Cocineras
             </span>
           </a>
         </li>
-        <li class="nav-item dropdown cabin">
+        <li class="nav-item dropdown ">
           <a class="nav-link dropdown-toggle custom-navbar-item-purp" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Español <i class="fas fa-language"></i>
           </a>

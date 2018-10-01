@@ -3,56 +3,58 @@
   <head>
     <meta name="layout" content="admin"/>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Administradores</title>
   </head>
   <body>
-    <div class="container mt-3">
-      <div class="mb-3 h2">
-        Lista de administradores
-      </div>
-    </div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th>Nombre</th>
-              <th>Apellido Paterno</th>
-              <th>Apellido Materno</th>
-              <th>Username</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <g:each var="item" in="${this.admins}">
-              <tr>
-                <td>
-                  ${item.nombre}
-                </td>
-                <td>
-                  ${item.apPaterno}
-                </td>
-                <td>
-                  ${item.apMaterno}
-                </td>
-                <td>
-                  ${item.username}
-                </td>
-                <td>
-                  <g:link action="update" params="[id:item.id]">Modificar</g:link>
-                </td>
-                <td>
-                  <g:link action="delete" params="[id:item.id]">Eliminar</g:link>
-                </td>
+    <div class="container mb-5">
+      <div class="row cabin">
+        <div class="col-lg-12">
+          <div class="display-4  mt-4">
+            Administradores
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <table class="table mt-4 mb-5 table-striped" data-aos="flip-up">
+            <thead>
+              <tr class="h3 lobster">
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido Paterno</th>
+                <th scope="col">Apellido Materno</th>
+                <th scope="col">Username</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
               </tr>
-            </g:each>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="container">
-      <g:link action="create" class="btn btn-outline-dark btn-md">Crear nuevo administrador</g:link>
+            </thead>
+            <tbody>
+              <g:each var="admin" in="${this.admins}">
+                <tr>
+                  <td>
+                    ${admin.nombre}
+                  </td>
+                  <td>
+                    ${admin.apPaterno}
+                  </td>
+                  <td>
+                    ${admin.apMaterno}
+                  </td>
+                  <td>
+                    ${admin.username}
+                  </td>
+                  <td>
+                    <g:link class="btn btn-danger" action="delete" id="${admin.id}" params="${params}">Eliminar</g:link>
+                  </td>
+                  <td>
+                    <g:link class="btn btn-secondary" action="update" id="${admin.id}">Modificar</g:link>
+                  </td>
+                </tr>
+              </g:each>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-12">
+          <g:link action="create" class="btn bg-purple btn-md text-light cabin">Crear nuevo administrador</g:link>
+        </div>
+      </div>      
     </div>
   </body>
 </html>

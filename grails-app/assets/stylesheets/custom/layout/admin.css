@@ -1,0 +1,102 @@
+body {
+  	background-color: #D7DEDC;
+}  
+
+.bg-purp-dark {
+	background-color: #221D23;
+}
+
+.dropdown-item:active {
+	font-weight: bold;	
+	color: black;
+	background-color: white;
+}
+
+.text-red {
+	color: #5F021F;
+}
+
+.text-green {
+	color: #4F8E3A;
+}
+
+.text-blue {
+	color: #28464B;
+}
+
+.text-purple {
+	color: #5E1240;
+}
+
+.bg-blue {
+	background-color: #28464B;
+}
+
+.bg-dark-purp {
+	background-color: #221D23;
+}
+
+.bg-dark-blue {
+	background-color: #1b2f33;
+}
+
+.bg-green {
+	background-color: #4F8E3A;
+}
+
+.bg-green-dark {
+	background-color: #568254
+}
+
+.bg-red {
+	background-color: #5F021F;
+}
+
+.bg-purple {
+	background-color: #5E1240;
+}
+
+.bg-purple-dark {
+	background-color: #5b123e;
+}
+
+
+.bg-red-dark {
+	background-color: #3f0214;
+}
+
+.grey-scale {
+	filter: grayscale(100%);
+}
+
+.pointer {
+	cursor:pointer
+}
+
+.paginate a {
+    color: #5E1240;
+    border: 1px solid #5E1240;
+    padding: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+    font-family: 'Cabin', Helvetica, Arial, sans-serif;
+    border-radius: 2px;
+}
+
+.paginate span {
+	color: white;
+	background-color: #5E1240;
+    padding: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+    font-family: 'Cabin', Helvetica, Arial, sans-serif;
+    border-radius: 2px;
+}
+
+.lobster {
+  font-family: 'Lobster', Georgia, Times, serif;
+}
+
+.cabin {
+  font-family: 'Cabin', Helvetica, Arial, sans-serif;
+}

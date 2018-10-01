@@ -1,30 +1,26 @@
 package cocinerastradicionalesoaxaca
 
-import com.cocinerasoaxaca.Role
-import com.cocinerasoaxaca.User
-import com.cocinerasoaxaca.UserRole
-import com.cocinerasoaxaca.Admin
-import com.cocinerasoaxaca.Actividad
-import com.cocinerasoaxaca.ActividadMedia
-import com.cocinerasoaxaca.Noticia
-import com.cocinerasoaxaca.NoticiaMedia
-import com.cocinerasoaxaca.Cocinera
+import com.cocinerasoaxaca.*
+import java.text.SimpleDateFormat
 
 class BootStrap {
     def init = { servletContext ->
-        
-        def admin = new User(username:'admin', password:'admin').save()
-        def roleAdmin = new Role(authority:'ROLE_ADMIN').save()
+        println '\n\nIn bootstrap process'
 
-        def adminUser = new Admin(nombre:'lino',apPaterno:'arango',apMaterno:'cruz',
-            username:'admin',password:"admin",passwordVerification:'cocin3r@s',user:admin).save()
+        def admin = new User(username:'admin', password:'admin').save(flush:true)
+        println admin
+        def roleAdmin = new Role(authority:'ROLE_ADMIN').save(flush:true)
+        def roleCocinera = new Role(authority:'ROLE_COCINERA').save(flush:true)
 
-        UserRole.create admin, roleAdmin
+        def adminUser = new Admin(nombre:'Lino', apPaterno:'Arango', apMaterno:'Cruz', username:'admin', user:admin).save(flush:true)
+        println adminUser
+
+        UserRole.create admin, roleAdmin 
 
         UserRole.withSession {
             it.flush()
             it.clear()
-        } 
+        }
 
         Actividad.ActividadTraduccion actividad1Traduccion = new Actividad.ActividadTraduccion(
             titulo: 'Esta es la actividad 1',
@@ -106,16 +102,6 @@ class BootStrap {
                 'Etiam ac vestibulum neque. Vestibulum nec mollis tellus. Nam in ultrices mi. Mauris gravida venenatis dui id dignissim. Nulla non enim non mi vestibulum faucibus vel condimentum ex. Aliquam maximus at enim non egestas. Etiam venenatis nulla nulla, vel malesuada metus sagittis sed. Cras molestie magna nibh, sit amet ullamcorper tortor luctus quis. Morbi pretium pulvinar nunc nec feugiat. Aliquam ac augue finibus, pretium odio in, ornare erat. Ut at felis orci. Integer lacus tellus, congue ut   mauris quis, iaculis mollis augue.'
             )
         ).save()
-
-        println actividad1.id
-
-        println actividad2.id
-
-        println actividad3.id
-
-        println actividad4.id
-
-        println actividad5.id
 
         def noticia1 = new Noticia(
             fechaPublicacion:new Date(),
@@ -428,6 +414,79 @@ class BootStrap {
                 'Etiam ac vestibulum neque. Vestibulum nec mollis tellus. Nam in ultrices mi. Mauris gravida venenatis dui id dignissim. Nulla non enim non mi vestibulum faucibus vel condimentum ex. Aliquam maximus at enim non egestas. Etiam venenatis nulla nulla, vel malesuada metus sagittis sed. Cras molestie magna nibh, sit amet ullamcorper tortor luctus quis. Morbi pretium pulvinar nunc nec feugiat. Aliquam ac augue finibus, pretium odio in, ornare erat. Ut at felis orci. Integer lacus tellus, congue ut   mauris quis, iaculis mollis augue.'
                 )
         ).save()
+
+        String fecha2017 = '05-05-2017'
+        SimpleDateFormat simpleDateFormat2017 = new SimpleDateFormat('dd-MM-yyyy')
+        Date date2017 = simpleDateFormat2017.parse(fecha2017)
+        println date2017
+
+        String fecha2018 = '05-05-2018'
+        SimpleDateFormat simpleDateFormat2018 = new SimpleDateFormat('dd-MM-yyyy')
+        Date date2018 = simpleDateFormat2017.parse(fecha2018)
+        println date2018
+
+        String fecha20182 = '05-12-2018'
+        SimpleDateFormat simpleDateFormat20182 = new SimpleDateFormat('dd-MM-yyyy')
+        Date date20182 = simpleDateFormat2018.parse(fecha20182)
+        println date20182
+
+        String fecha2019 = '05-05-2019'
+        SimpleDateFormat simpleDateFormat2019 = new SimpleDateFormat('dd-MM-yyyy')
+        Date date2019 = simpleDateFormat2019.parse(fecha2019)
+        println date2019
+
+        def cocinerasConcurso1 = new CocinerasConcurso(
+            numeroConvocatoria: 1,
+            anioConvocatoria: "2017",
+            fechaInicio: date2017,
+            fechaFinal: date2017,
+            lugar: "Santo Domingo",
+            latitud: "17.065673",
+            longitud: " -96.723208",
+            ubicacionArchivo: "/home/limbo/Documentos/Programming/Grails/CocinerasTradicionalesOaxaca/src/main/webapp/convocatoria/1-2017.pdf",
+            concursos: [new Concurso(descripcion:"Platillo tradicional")]
+        ).save()
+
+        def cocinerasConcurso2 = new CocinerasConcurso(
+            numeroConvocatoria: 2,
+            anioConvocatoria: "2018",
+            fechaInicio: date2018,
+            fechaFinal: date2018,
+            lugar: "Santo Domingo",
+            latitud: "17.065673",
+            longitud: " -96.723208",
+            ubicacionArchivo: "/home/limbo/Documentos/Programming/Grails/CocinerasTradicionalesOaxaca/src/main/webapp/convocatoria/2-2018.pdf",
+            concursos: [new Concurso(descripcion:"Platillo tradicional")]
+        ).save()
+
+        def cocinerasConcurso3 = new CocinerasConcurso(
+            numeroConvocatoria: 3,
+            anioConvocatoria: "2018",
+            fechaInicio: date20182,
+            fechaFinal: date20182,
+            lugar: "Santo Domingo",
+            latitud: "17.065673",
+            longitud: " -96.723208",
+            ubicacionArchivo: "/home/limbo/Documentos/Programming/Grails/CocinerasTradicionalesOaxaca/src/main/webapp/convocatoria/3-2018.pdf",
+            concursos: [new Concurso(descripcion:"Platillo tradicional")]
+        ).save()
+
+        def cocinerasConcurso4 = new CocinerasConcurso(
+            numeroConvocatoria: 4,
+            anioConvocatoria: "2019",
+            fechaInicio: date2019,
+            fechaFinal: date2019,
+            lugar: "Santo Domingo",
+            latitud: "17.065673",
+            longitud: " -96.723208",
+            ubicacionArchivo: "/home/limbo/Documentos/Programming/Grails/CocinerasTradicionalesOaxaca/src/main/webapp/convocatoria/4-2019.pdf",
+            concursos: [new Concurso(descripcion:"Platillo tradicional")]
+        ).save()
+
+        println cocinerasConcurso1
+        println cocinerasConcurso2
+        println cocinerasConcurso3
+        println cocinerasConcurso4
     }
 
     def destroy = {

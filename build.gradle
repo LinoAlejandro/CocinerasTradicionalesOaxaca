@@ -48,7 +48,6 @@ dependencies {
     compile "org.grails.plugins:gsp"
     compile 'org.grails.plugins:spring-security-core:3.2.1'
     compile 'org.grails.plugins:grails-melody-plugin:1.73.1'
-    runtime 'org.grails.plugins:grails-melody-plugin:1.73.1'
     runtime "mysql:mysql-connector-java:5.1.37"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web"
